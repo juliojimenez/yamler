@@ -1,0 +1,12 @@
+name: "yamler"
+description: "YAML Processor GitHub Action"
+inputs:
+  yaml-file:
+    description: "Input file"
+    required: true
+outputs:
+  yamler: # id of output
+    description: "Outputs from your input file."
+runs:
+  using: 'node12'
+  main: 'index.js'

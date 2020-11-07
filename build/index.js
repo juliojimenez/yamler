@@ -47,10 +47,12 @@ const fs_1 = __importDefault(require("fs"));
 const yaml_1 = __importDefault(require("yaml"));
 async function safeString(unsafeString) {
   const makeLowerCase = unsafeString.toLowerCase();
-  const replaceSpacesEtc = makeLowerCase.replace(/\s|\/|\-|\./g, "_");
+  const replaceSpacesEtc = makeLowerCase.replace(/\s|\/|\-|\.|\:/g, "_");
   const removeParenthesesEtc = replaceSpacesEtc.replace(/\(|\)|\[|\]/g, "");
   const replacePlus = removeParenthesesEtc.replace(/\+/g, "p");
-  return replacePlus;
+  const replaceSharp = replacePlus.replace(/\#/g, "s");
+  console.log(replaceSharp);
+  return replaceSharp;
 }
 async function traverseObject(theObject, parents) {
   for (let key of Object.keys(theObject)) {
@@ -60,8 +62,7 @@ async function traverseObject(theObject, parents) {
         `${parents.join("__")}${parents.length > 0 ? "__" : ""}${key}`,
         theObject[key]
       );
-    }
-    if (keyType === "object") {
+    } else if (keyType === "object") {
       console.log(parents);
       let newParents = [];
       if (Object.keys(theObject)[Object.keys(theObject).length - 1] === key) {
@@ -91,8 +92,7 @@ async function traverseArray(theArray, parents) {
         )}`,
         elem
       );
-    }
-    if (elemType === "object") {
+    } else if (elemType === "object") {
       console.log(parents);
       let newParents = [];
       if (theArray.indexOf(elem) < theArray.length - 1) {

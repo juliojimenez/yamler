@@ -21,4 +21,4 @@ jobs:
         run: |
           echo "${{ steps.yamler.outputs.yaml }}"
           echo "${{ steps.yamler.outputs.what_it_is }}"
-          echo "${{ steps.yamler.outputs.yaml_1_2_3rd_edition }}"
+          echo "${{ steps.yamler.outputs.yaml_resources__yaml_1_2_3rd_edition }}"

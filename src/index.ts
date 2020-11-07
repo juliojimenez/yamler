@@ -5,10 +5,12 @@ import YAML from "yaml";
 
 async function safeString(unsafeString: string): Promise<string> {
   const makeLowerCase = unsafeString.toLowerCase();
-  const replaceSpacesEtc = makeLowerCase.replace(/\s|\/|\-|\./g, "_");
+  const replaceSpacesEtc = makeLowerCase.replace(/\s|\/|\-|\.|\:/g, "_");
   const removeParenthesesEtc = replaceSpacesEtc.replace(/\(|\)|\[|\]/g, "");
   const replacePlus = removeParenthesesEtc.replace(/\+/g, "p");
-  return replacePlus;
+  const replaceSharp = replacePlus.replace(/\#/g, "s");
+  console.log(replaceSharp);
+  return replaceSharp;
 }
 
 async function traverseObject(
@@ -24,8 +26,7 @@ async function traverseObject(
         `${parents.join("__")}${parents.length > 0 ? "__" : ""}${key}`,
         theObject[key]
       );
-    }
-    if (keyType === "object") {
+    } else if (keyType === "object") {
       console.log(parents);
       let newParents: Array<string> = [];
       if (Object.keys(theObject)[Object.keys(theObject).length - 1] === key) {
@@ -59,8 +60,7 @@ async function traverseArray(
         )}`,
         elem
       );
-    }
-    if (elemType === "object") {
+    } else if (elemType === "object") {
       console.log(parents);
       let newParents: Array<string> = [];
       if (theArray.indexOf(elem) < theArray.length - 1) {

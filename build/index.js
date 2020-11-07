@@ -53,42 +53,39 @@ async function safeString(unsafeString) {
   console.log(replacePlus);
   return replacePlus;
 }
-async function traverseObject(theObject) {
+async function traverseObject(theObject, parents) {
   for (let key of Object.keys(theObject)) {
     const keyType = typeof theObject[key];
     if (keyType === "string") {
-      await handleString(key, theObject[key]);
+      await handleString(`${parents.join("__")}${key}`, theObject[key]);
     }
     if (keyType === "object") {
+      parents.push(key);
       if (Array.isArray(theObject[key])) {
-        core.startGroup(await safeString(key));
-        await traverseArray(theObject[key]);
-        core.endGroup();
+        await traverseArray(theObject[key], parents);
       } else {
-        core.startGroup(await safeString(key));
-        await traverseObject(theObject[key]);
-        core.endGroup();
+        await traverseObject(theObject[key], parents);
       }
     }
   }
   return true;
 }
-async function traverseArray(theArray) {
+async function traverseArray(theArray, parents) {
   for (let elem of theArray) {
     console.log(elem);
     const elemType = typeof elem;
     if (elemType === "string") {
-      await handleString(String(theArray.indexOf(elem)), elem);
+      await handleString(
+        `${parents.join("__")}${String(theArray.indexOf(elem))}`,
+        elem
+      );
     }
     if (elemType === "object") {
+      parents.push(String(theArray.indexOf(elem)));
       if (Array.isArray(elem)) {
-        core.startGroup(await safeString(String(elem)));
-        await traverseArray(elem);
-        core.endGroup();
+        await traverseArray(elem, parents);
       } else {
-        core.startGroup(await safeString(String(theArray.indexOf(elem))));
-        await traverseObject(elem);
-        core.endGroup();
+        await traverseObject(elem, parents);
       }
     }
   }
@@ -104,5 +101,5 @@ async function handleString(key, value) {
   const yamlFile = fs_1.default.readFileSync(yamlFilePath, "utf8");
   const yamlParse = yaml_1.default.parse(yamlFile);
   console.log(yamlParse);
-  await traverseObject(yamlParse);
+  await traverseObject(yamlParse, []);
 })();

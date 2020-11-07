@@ -12,45 +12,48 @@ async function safeString(unsafeString: string): Promise<string> {
   return replacePlus;
 }
 
-async function traverseObject(theObject: {
-  [index: string]: any;
-}): Promise<boolean> {
+async function traverseObject(
+  theObject: {
+    [index: string]: any;
+  },
+  parents: Array<string>
+): Promise<boolean> {
   for (let key of Object.keys(theObject)) {
     const keyType = typeof theObject[key];
     if (keyType === "string") {
-      await handleString(key, theObject[key]);
+      await handleString(`${parents.join("__")}${key}`, theObject[key]);
     }
     if (keyType === "object") {
+      parents.push(key);
       if (Array.isArray(theObject[key])) {
-        core.startGroup(await safeString(key));
-        await traverseArray(theObject[key]);
-        core.endGroup();
+        await traverseArray(theObject[key], parents);
       } else {
-        core.startGroup(await safeString(key));
-        await traverseObject(theObject[key]);
-        core.endGroup();
+        await traverseObject(theObject[key], parents);
       }
     }
   }
   return true;
 }
 
-async function traverseArray(theArray: Array<any>): Promise<boolean> {
+async function traverseArray(
+  theArray: Array<any>,
+  parents: Array<string>
+): Promise<boolean> {
   for (let elem of theArray) {
     console.log(elem);
     const elemType = typeof elem;
     if (elemType === "string") {
-      await handleString(String(theArray.indexOf(elem)), elem);
+      await handleString(
+        `${parents.join("__")}${String(theArray.indexOf(elem))}`,
+        elem
+      );
     }
     if (elemType === "object") {
+      parents.push(String(theArray.indexOf(elem)));
       if (Array.isArray(elem)) {
-        core.startGroup(await safeString(String(elem)));
-        await traverseArray(elem);
-        core.endGroup();
+        await traverseArray(elem, parents);
       } else {
-        core.startGroup(await safeString(String(theArray.indexOf(elem))));
-        await traverseObject(elem);
-        core.endGroup();
+        await traverseObject(elem, parents);
       }
     }
   }
@@ -69,7 +72,7 @@ async function handleString(key: string, value: string): Promise<boolean> {
   const yamlFile = fs.readFileSync(yamlFilePath, "utf8");
   const yamlParse = YAML.parse(yamlFile);
   console.log(yamlParse);
-  await traverseObject(yamlParse);
+  await traverseObject(yamlParse, []);
   // } catch (error) {
   //   core.setFailed(error.message);
   // }

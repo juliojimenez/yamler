@@ -50,7 +50,6 @@ async function safeString(unsafeString) {
   const replaceSpacesEtc = makeLowerCase.replace(/\s|\/|\-|\./g, "_");
   const removeParenthesesEtc = replaceSpacesEtc.replace(/\(|\)|\[|\]/g, "");
   const replacePlus = removeParenthesesEtc.replace(/\+/g, "p");
-  console.log(replacePlus);
   return replacePlus;
 }
 async function traverseObject(theObject, parents) {
@@ -63,6 +62,7 @@ async function traverseObject(theObject, parents) {
       );
     }
     if (keyType === "object") {
+      console.log(parents);
       let newParents = [];
       if (Object.keys(theObject)[Object.keys(theObject).length - 1] === key) {
         newParents = parents.slice(0, -2);
@@ -92,6 +92,7 @@ async function traverseArray(theArray, parents) {
       );
     }
     if (elemType === "object") {
+      console.log(parents);
       let newParents = [];
       if (theArray.indexOf(elem) < theArray.length - 1) {
         parents.push(String(theArray.indexOf(elem)));

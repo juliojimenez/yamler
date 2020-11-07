@@ -77,15 +77,15 @@ async function traverseArray(theArray) {
   for (let elem of theArray) {
     const elemType = typeof elem;
     if (elemType === "string") {
-      await handleString(theArray.findIndex(elem).toString(), elem);
+      await handleString(String(theArray.findIndex(elem)), elem);
     }
     if (elemType === "object") {
       if (Array.isArray(elem)) {
-        core.startGroup(await safeString(elem.toString()));
+        core.startGroup(await safeString(String(elem)));
         await traverseArray(elem);
         core.endGroup();
       } else {
-        core.startGroup(await safeString(theArray.findIndex(elem).toString()));
+        core.startGroup(await safeString(String(theArray.findIndex(elem))));
         await traverseObject(elem);
         core.endGroup();
       }

@@ -20,7 +20,7 @@ async function traverseObject(theObject: {
       await handleString(key, theObject[key]);
     }
     if (keyType === "object") {
-      if (theObject[key].isArray()) {
+      if (Array.isArray(theObject[key])) {
         core.startGroup(await safeString(key));
         await traverseArray(theObject[key]);
         core.endGroup();
@@ -41,8 +41,8 @@ async function traverseArray(theArray: Array<any>): Promise<boolean> {
       await handleString(theArray.findIndex(elem).toString(), elem);
     }
     if (elemType === "object") {
-      if (elem.isArray()) {
-        core.startGroup(await safeString(theArray.findIndex(elem).toString()));
+      if (Array.isArray(elem)) {
+        core.startGroup(await safeString(elem.toString()));
         await traverseArray(elem);
         core.endGroup();
       } else {

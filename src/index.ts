@@ -5,31 +5,70 @@ import YAML from "yaml";
 
 async function safeString(unsafeString: string): Promise<string> {
   const makeLowerCase = unsafeString.toLowerCase();
-  const replaceSpaces = makeLowerCase.replace(/\s/g, "_");
-  console.log(replaceSpaces);
-  return replaceSpaces;
+  const replaceSpacesEtc = makeLowerCase.replace(/\s|\/|\-\./g, "_");
+  const removeParenthesesEtc = replaceSpacesEtc.replace(/\(|\)|\[|\]/g, "");
+  console.log(removeParenthesesEtc);
+  return removeParenthesesEtc;
+}
+
+async function traverseObject(theObject: {
+  [index: string]: any;
+}): Promise<boolean> {
+  for (let key of Object.keys(theObject)) {
+    const keyType = typeof theObject[key];
+    if (keyType === "string") {
+      await handleString(key, theObject[key]);
+    }
+    if (keyType === "object") {
+      if (theObject[key].isArray()) {
+        core.startGroup(await safeString(key));
+        await traverseArray(theObject[key]);
+        core.endGroup();
+      } else {
+        core.startGroup(await safeString(key));
+        await traverseObject(theObject[key]);
+        core.endGroup();
+      }
+    }
+  }
+  return true;
+}
+
+async function traverseArray(theArray: Array<any>): Promise<boolean> {
+  for (let elem of theArray) {
+    const elemType = typeof elem;
+    if (elemType === "string") {
+      await handleString(theArray.findIndex(elem).toString(), elem);
+    }
+    if (elemType === "object") {
+      if (elem.isArray()) {
+        core.startGroup(await safeString(theArray.findIndex(elem).toString()));
+        await traverseArray(elem);
+        core.endGroup();
+      } else {
+        core.startGroup(await safeString(theArray.findIndex(elem).toString()));
+        await traverseObject(elem);
+        core.endGroup();
+      }
+    }
+  }
+  return true;
+}
+
+async function handleString(key: string, value: string): Promise<boolean> {
+  const safeKey = await safeString(key);
+  core.setOutput(safeKey, value);
+  return true;
 }
 
 (async () => {
-  // try {
-  const yamlFilePath = core.getInput("yaml-file");
-  const yamlFile = fs.readFileSync(yamlFilePath, "utf8");
-  const yamlParse = YAML.parse(yamlFile);
-  for (let key of Object.keys(yamlParse)) {
-    console.log(key);
-    const keyType = typeof yamlParse[key];
-    if (keyType === "string") {
-      const safeKey = await safeString(key);
-      core.setOutput(safeKey, yamlParse[key]);
-    }
+  try {
+    const yamlFilePath = core.getInput("yaml-file");
+    const yamlFile = fs.readFileSync(yamlFilePath, "utf8");
+    const yamlParse = YAML.parse(yamlFile);
+    await traverseObject(yamlParse);
+    console.log(yamlParse);
+  } catch (error) {
+    core.setFailed(error.message);
   }
-  console.log(yamlParse);
-  // const time = (new Date()).toTimeString();
-  // core.setOutput("time", time);
-  // // Get the JSON webhook payload for the event that triggered the workflow
-  // const payload = JSON.stringify(github.context.payload, undefined, 2)
-  // console.log(`The event payload: ${payload}`);
-  // } catch (error) {
-  //   core.setFailed(error.message);
-  // }
 })();

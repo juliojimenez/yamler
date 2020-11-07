@@ -67,8 +67,8 @@ async function handleString(key: string, value: string): Promise<boolean> {
   const yamlFilePath = core.getInput("yaml-file");
   const yamlFile = fs.readFileSync(yamlFilePath, "utf8");
   const yamlParse = YAML.parse(yamlFile);
-  await traverseObject(yamlParse);
   console.log(yamlParse);
+  await traverseObject(yamlParse);
   // } catch (error) {
   //   core.setFailed(error.message);
   // }

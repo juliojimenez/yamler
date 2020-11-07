@@ -47,10 +47,11 @@ const fs_1 = __importDefault(require("fs"));
 const yaml_1 = __importDefault(require("yaml"));
 async function safeString(unsafeString) {
   const makeLowerCase = unsafeString.toLowerCase();
-  const replaceSpacesEtc = makeLowerCase.replace(/\s|\/|\-\./g, "_");
+  const replaceSpacesEtc = makeLowerCase.replace(/\s|\/|\-|\./g, "_");
   const removeParenthesesEtc = replaceSpacesEtc.replace(/\(|\)|\[|\]/g, "");
-  console.log(removeParenthesesEtc);
-  return removeParenthesesEtc;
+  const replacePlus = removeParenthesesEtc.replace(/\+/g, "p");
+  console.log(replacePlus);
+  return replacePlus;
 }
 async function traverseObject(theObject) {
   for (let key of Object.keys(theObject)) {
@@ -98,13 +99,9 @@ async function handleString(key, value) {
   return true;
 }
 (async () => {
-  try {
-    const yamlFilePath = core.getInput("yaml-file");
-    const yamlFile = fs_1.default.readFileSync(yamlFilePath, "utf8");
-    const yamlParse = yaml_1.default.parse(yamlFile);
-    await traverseObject(yamlParse);
-    console.log(yamlParse);
-  } catch (error) {
-    core.setFailed(error.message);
-  }
+  const yamlFilePath = core.getInput("yaml-file");
+  const yamlFile = fs_1.default.readFileSync(yamlFilePath, "utf8");
+  const yamlParse = yaml_1.default.parse(yamlFile);
+  await traverseObject(yamlParse);
+  console.log(yamlParse);
 })();

@@ -28,11 +28,12 @@ async function traverseObject(
     }
     if (keyType === "object") {
       let newParents: Array<string> = [];
-      if (Object.keys(theObject)[0] === key) {
+      if (Object.keys(theObject)[0] === key && parents.length > 1) {
         parents.push(key);
         newParents = parents;
       } else if (
-        Object.keys(theObject)[Object.keys(theObject).length - 1] === key
+        Object.keys(theObject)[Object.keys(theObject).length - 1] === key &&
+        parents.length > 1
       ) {
         newParents = parents.splice(-1);
       } else {
@@ -65,10 +66,13 @@ async function traverseArray(
     }
     if (elemType === "object") {
       let newParents: Array<string> = [];
-      if (theArray.indexOf(elem) === 0) {
+      if (theArray.indexOf(elem) === 0 && parents.length > 1) {
         parents.push(String(theArray.indexOf(elem)));
         newParents = parents;
-      } else if (theArray.indexOf(elem) === theArray.length - 1) {
+      } else if (
+        theArray.indexOf(elem) === theArray.length - 1 &&
+        parents.length > 1
+      ) {
         newParents = parents.splice(-1);
       } else {
         newParents = parents;

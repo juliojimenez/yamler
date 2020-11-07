@@ -65,6 +65,7 @@ async function traverseObject(theObject, parents) {
       console.log(parents);
       let newParents = [];
       if (Object.keys(theObject)[Object.keys(theObject).length - 1] === key) {
+        console.log("slicing");
         newParents = parents.slice(0, -2);
       } else {
         parents.push(key);
@@ -98,6 +99,7 @@ async function traverseArray(theArray, parents) {
         parents.push(String(theArray.indexOf(elem)));
         newParents = parents;
       } else if (theArray.indexOf(elem) === theArray.length - 1) {
+        console.log("slicing");
         newParents = parents.slice(0, -2);
       }
       if (Array.isArray(elem)) {

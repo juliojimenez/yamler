@@ -66,7 +66,7 @@ async function traverseArray(
     }
     if (elemType === "object") {
       let newParents: Array<string> = [];
-      if (theArray.indexOf(elem) === 0 && parents.length > 1) {
+      if (theArray.indexOf(elem) === 0) {
         parents.push(String(theArray.indexOf(elem)));
         newParents = parents;
       } else if (

@@ -102,6 +102,6 @@ async function handleString(key, value) {
   const yamlFilePath = core.getInput("yaml-file");
   const yamlFile = fs_1.default.readFileSync(yamlFilePath, "utf8");
   const yamlParse = yaml_1.default.parse(yamlFile);
-  await traverseObject(yamlParse);
   console.log(yamlParse);
+  await traverseObject(yamlParse);
 })();

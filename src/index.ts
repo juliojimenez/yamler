@@ -21,7 +21,10 @@ async function traverseObject(
   for (let key of Object.keys(theObject)) {
     const keyType = typeof theObject[key];
     if (keyType === "string") {
-      await handleString(`${parents.join("__")}__${key}`, theObject[key]);
+      await handleString(
+        `${parents.join("__")}${parents.length > 0 ? "__" : ""}${key}`,
+        theObject[key]
+      );
     }
     if (keyType === "object") {
       let newParents: Array<string> = [];
@@ -54,7 +57,9 @@ async function traverseArray(
     const elemType = typeof elem;
     if (elemType === "string") {
       await handleString(
-        `${parents.join("__")}__${String(theArray.indexOf(elem))}`,
+        `${parents.join("__")}${parents.length > 0 ? "__" : ""}${String(
+          theArray.indexOf(elem)
+        )}`,
         elem
       );
     }

@@ -8,6 +8,7 @@ async function safeString(unsafeString: string): Promise<string> {
   const replaceSpacesEtc = makeLowerCase.replace(/\s|\/|\-|\./g, "_");
   const removeParenthesesEtc = replaceSpacesEtc.replace(/\(|\)|\[|\]/g, "");
   const replacePlus = removeParenthesesEtc.replace(/\+/g, "p");
+  console.log(replacePlus);
   return replacePlus;
 }
 

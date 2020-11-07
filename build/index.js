@@ -50,6 +50,7 @@ async function safeString(unsafeString) {
   const replaceSpacesEtc = makeLowerCase.replace(/\s|\/|\-|\./g, "_");
   const removeParenthesesEtc = replaceSpacesEtc.replace(/\(|\)|\[|\]/g, "");
   const replacePlus = removeParenthesesEtc.replace(/\+/g, "p");
+  console.log(replacePlus);
   return replacePlus;
 }
 async function traverseObject(theObject) {

@@ -77,7 +77,7 @@ async function traverseArray(theArray) {
     console.log(elem);
     const elemType = typeof elem;
     if (elemType === "string") {
-      await handleString(String(theArray.findIndex(elem)), elem);
+      await handleString(String(theArray.indexOf(elem)), elem);
     }
     if (elemType === "object") {
       if (Array.isArray(elem)) {
@@ -85,7 +85,7 @@ async function traverseArray(theArray) {
         await traverseArray(elem);
         core.endGroup();
       } else {
-        core.startGroup(await safeString(String(theArray.findIndex(elem))));
+        core.startGroup(await safeString(String(theArray.indexOf(elem))));
         await traverseObject(elem);
         core.endGroup();
       }

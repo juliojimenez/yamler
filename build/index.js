@@ -57,14 +57,24 @@ async function traverseObject(theObject, parents) {
   for (let key of Object.keys(theObject)) {
     const keyType = typeof theObject[key];
     if (keyType === "string") {
-      await handleString(`${parents.join("__")}${key}`, theObject[key]);
+      await handleString(`${parents.join("__")}__${key}`, theObject[key]);
     }
     if (keyType === "object") {
-      parents.push(key);
-      if (Array.isArray(theObject[key])) {
-        await traverseArray(theObject[key], parents);
+      let newParents = [];
+      if (Object.keys(theObject)[0] === key) {
+        parents.push(key);
+        newParents = parents;
+      } else if (
+        Object.keys(theObject)[Object.keys(theObject).length - 1] === key
+      ) {
+        newParents = parents.splice(-1);
       } else {
-        await traverseObject(theObject[key], parents);
+        newParents = parents;
+      }
+      if (Array.isArray(theObject[key])) {
+        await traverseArray(theObject[key], newParents);
+      } else {
+        await traverseObject(theObject[key], newParents);
       }
     }
   }
@@ -76,16 +86,24 @@ async function traverseArray(theArray, parents) {
     const elemType = typeof elem;
     if (elemType === "string") {
       await handleString(
-        `${parents.join("__")}${String(theArray.indexOf(elem))}`,
+        `${parents.join("__")}__${String(theArray.indexOf(elem))}`,
         elem
       );
     }
     if (elemType === "object") {
-      parents.push(String(theArray.indexOf(elem)));
-      if (Array.isArray(elem)) {
-        await traverseArray(elem, parents);
+      let newParents = [];
+      if (theArray.indexOf(elem) === 0) {
+        parents.push(String(theArray.indexOf(elem)));
+        newParents = parents;
+      } else if (theArray.indexOf(elem) === theArray.length - 1) {
+        newParents = parents.splice(-1);
       } else {
-        await traverseObject(elem, parents);
+        newParents = parents;
+      }
+      if (Array.isArray(elem)) {
+        await traverseArray(elem, newParents);
+      } else {
+        await traverseObject(elem, newParents);
       }
     }
   }

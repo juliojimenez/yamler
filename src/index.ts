@@ -35,7 +35,7 @@ async function traverseObject(
         Object.keys(theObject)[Object.keys(theObject).length - 1] === key &&
         parents.length > 1
       ) {
-        newParents = parents.splice(-1);
+        newParents = parents.slice(0, -1);
       } else {
         newParents = parents;
       }
@@ -73,7 +73,7 @@ async function traverseArray(
         theArray.indexOf(elem) === theArray.length - 1 &&
         parents.length > 1
       ) {
-        newParents = parents.splice(-1);
+        newParents = parents.slice(0, -1);
       } else {
         newParents = parents;
       }

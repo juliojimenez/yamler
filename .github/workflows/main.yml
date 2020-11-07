@@ -18,4 +18,6 @@ jobs:
 
       # Use the output from the yamler step
       - name: Output Test
-        run: echo "${{ steps.yamler.outputs.yaml }}"
+        run: |
+          echo "${{ steps.yamler.outputs.yaml }}"
+          echo "${{ steps.yamler.outputs.what_it_is }}"

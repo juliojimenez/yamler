@@ -8,6 +8,9 @@ import YAML from "yaml";
   const yamlFilePath = core.getInput("yaml-file");
   const yamlFile = fs.readFileSync(yamlFilePath, "utf8");
   const yamlParse = YAML.parse(yamlFile);
+  for (let key in Object.keys(yamlParse)) {
+    console.log(key);
+  }
   console.log(yamlParse);
   // const time = (new Date()).toTimeString();
   // core.setOutput("time", time);

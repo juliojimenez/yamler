@@ -49,7 +49,7 @@ const yaml_1 = __importDefault(require("yaml"));
   const yamlFilePath = core.getInput("yaml-file");
   const yamlFile = fs_1.default.readFileSync(yamlFilePath, "utf8");
   const yamlParse = yaml_1.default.parse(yamlFile);
-  for (let key in Object.keys(yamlParse)) {
+  for (let key of Object.keys(yamlParse)) {
     console.log(key);
   }
   console.log(yamlParse);

@@ -48,6 +48,7 @@ const yaml_1 = __importDefault(require("yaml"));
 async function safeString(unsafeString) {
   const makeLowerCase = unsafeString.toLowerCase();
   const replaceSpaces = makeLowerCase.replace(/\S/g, "_");
+  console.log(replaceSpaces);
   return replaceSpaces;
 }
 (async () => {

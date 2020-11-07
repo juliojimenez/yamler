@@ -6,6 +6,7 @@ import YAML from "yaml";
 async function safeString(unsafeString: string): Promise<string> {
   const makeLowerCase = unsafeString.toLowerCase();
   const replaceSpaces = makeLowerCase.replace(/\S/g, "_");
+  console.log(replaceSpaces);
   return replaceSpaces;
 }
 

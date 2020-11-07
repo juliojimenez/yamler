@@ -17,5 +17,5 @@ jobs:
           yaml-file: "__tests__/test.yaml"
 
       # Use the output from the yamler step
-      - name: Get the output time
+      - name: Output Test
         run: echo "${{ steps.yamler.outputs.yaml }}"

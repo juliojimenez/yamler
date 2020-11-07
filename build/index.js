@@ -65,7 +65,7 @@ async function traverseObject(theObject, parents) {
     if (keyType === "object") {
       let newParents = [];
       if (Object.keys(theObject)[Object.keys(theObject).length - 1] === key) {
-        newParents = parents.slice(0, -1);
+        newParents = parents.slice(0, -2);
       } else {
         parents.push(key);
         newParents = parents;
@@ -97,7 +97,7 @@ async function traverseArray(theArray, parents) {
         parents.push(String(theArray.indexOf(elem)));
         newParents = parents;
       } else if (theArray.indexOf(elem) === theArray.length - 1) {
-        newParents = parents.slice(0, -1);
+        newParents = parents.slice(0, -2);
       }
       if (Array.isArray(elem)) {
         await traverseArray(elem, newParents);

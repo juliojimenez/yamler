@@ -45,12 +45,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(require("@actions/core"));
 const fs_1 = __importDefault(require("fs"));
 const yaml_1 = __importDefault(require("yaml"));
+async function safeString(unsafeString) {
+  const makeLowerCase = unsafeString.toLowerCase();
+  const replaceSpaces = makeLowerCase.replace(/\S/g, "_");
+  return replaceSpaces;
+}
 (async () => {
   const yamlFilePath = core.getInput("yaml-file");
   const yamlFile = fs_1.default.readFileSync(yamlFilePath, "utf8");
   const yamlParse = yaml_1.default.parse(yamlFile);
   for (let key of Object.keys(yamlParse)) {
     console.log(key);
+    const keyType = typeof yamlParse[key];
+    if (keyType === "string") {
+      const safeKey = await safeString(key);
+      core.setOutput(safeKey, yamlParse[key]);
+    }
   }
   console.log(yamlParse);
 })();

@@ -16,6 +16,6 @@ jobs:
         with:
           yaml-file: "__tests__/test.yaml"
 
-      # Use the output from the `hello` step
-#      - name: Get the output time
-#        run: echo "The time was ${{ steps.hello.outputs.time }}"
+      # Use the output from the yamler step
+      - name: Get the output time
+        run: echo "${{ steps.yamler.outputs.yaml }}"

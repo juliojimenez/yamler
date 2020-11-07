@@ -3,6 +3,12 @@ import * as core from "@actions/core";
 import fs from "fs";
 import YAML from "yaml";
 
+async function safeString(unsafeString: string): Promise<string> {
+  const makeLowerCase = unsafeString.toLowerCase();
+  const replaceSpaces = makeLowerCase.replace(/\S/g, "_");
+  return replaceSpaces;
+}
+
 (async () => {
   // try {
   const yamlFilePath = core.getInput("yaml-file");
@@ -10,6 +16,11 @@ import YAML from "yaml";
   const yamlParse = YAML.parse(yamlFile);
   for (let key of Object.keys(yamlParse)) {
     console.log(key);
+    const keyType = typeof yamlParse[key];
+    if (keyType === "string") {
+      const safeKey = await safeString(key);
+      core.setOutput(safeKey, yamlParse[key]);
+    }
   }
   console.log(yamlParse);
   // const time = (new Date()).toTimeString();

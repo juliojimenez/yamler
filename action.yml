@@ -8,5 +8,5 @@ outputs:
   yamler: # id of output
     description: "Outputs from your input file."
 runs:
-  using: 'node12'
-  main: 'index.js'
+  using: "node12"
+  main: "index.js"

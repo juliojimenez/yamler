@@ -69,10 +69,7 @@ async function traverseArray(
       if (theArray.indexOf(elem) === 0) {
         parents.push(String(theArray.indexOf(elem)));
         newParents = parents;
-      } else if (
-        theArray.indexOf(elem) === theArray.length - 1 &&
-        parents.length > 1
-      ) {
+      } else if (theArray.indexOf(elem) === theArray.length - 1) {
         newParents = parents.slice(0, -1);
       } else {
         newParents = parents;

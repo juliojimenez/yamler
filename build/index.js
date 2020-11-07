@@ -75,6 +75,7 @@ async function traverseObject(theObject) {
 }
 async function traverseArray(theArray) {
   for (let elem of theArray) {
+    console.log(elem);
     const elemType = typeof elem;
     if (elemType === "string") {
       await handleString(String(theArray.findIndex(elem)), elem);

@@ -20,10 +20,7 @@ async function traverseObject(theObject: {
 }): Promise<boolean> {
   for (let key of Object.keys(theObject)) {
     console.log(parentNodes);
-    if (
-      Object.keys(theObject)[0] === key &&
-      Object.keys(theObject).length > 0
-    ) {
+    if (Object.keys(theObject)[0] === key) {
       parentNodes.pop();
       parentNodes.push(key);
     } else {
@@ -48,7 +45,7 @@ async function traverseObject(theObject: {
 async function traverseArray(theArray: Array<any>): Promise<boolean> {
   for (let elem of theArray) {
     console.log(parentNodes);
-    if (theArray.indexOf(elem) === 0 && theArray.length > 0) {
+    if (theArray.indexOf(elem) === 0) {
       parentNodes.pop();
       parentNodes.push(String(theArray.indexOf(elem)));
     } else if (theArray.indexOf(elem) === theArray.length - 1) {

@@ -1,6 +1,6 @@
 # yamler
 
-**yamler** is a GitHub Action that processes an entire YAML document and makes all elements available to you via GitHub Workflow output variables.
+**yamler** is a GitHub Action that processes an entire YAML document and makes all elements available to you as GitHub Workflow output variables.
 
 ## Usage
 
@@ -14,7 +14,9 @@
 
 ## Output
 
-In this example, the test file used is almost the same as the content file for [yaml.org](https://yaml.org). A deeper _number_ array was added to test for types other than string, object, and array.
+yamler outputs the entire document as yamler-formatted output variable names. This serves as a good reference when the YAML document contains tags with characters not supported by GitHub Workflow variable names. yamler will automatically transform tags into friendly variable names.
+
+In this example, the test file used is derived from [yaml.org](https://yaml.org). A deeper _number_ array was added to test for types other than string, object, and array.
 
 ```
 ***** Output Variables *****
@@ -107,7 +109,7 @@ news__37
 
 ## Accessing Output Variables
 
-Simple example echoing a few variables.
+yamler preserves document structure using double-underscore (**) notation. If a value is located at `foo.bar`, the yamler output variable will become `foo**bar`. Array's are indexed in a similar way, the element `bar.foo[5]`can be accessed with yamler at`bar**foo**5`.
 
 ```
 # Use the output from the yamler step

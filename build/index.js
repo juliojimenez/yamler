@@ -66,7 +66,6 @@ async function traverseObject(theObject) {
     } else if (keyType === "object") {
       console.log(parentNodes);
       if (Object.keys(theObject)[0] === key) {
-        parentNodes.pop();
         parentNodes.push(await safeString(key));
       } else {
       }
@@ -92,7 +91,6 @@ async function traverseArray(theArray) {
     } else if (elemType === "object") {
       console.log(parentNodes);
       if (theArray.indexOf(elem) === 0) {
-        parentNodes.pop();
         parentNodes.push(String(theArray.indexOf(elem)));
       } else if (theArray.indexOf(elem) === theArray.length - 1) {
       }

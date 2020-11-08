@@ -65,17 +65,13 @@ async function traverseObject(theObject) {
       );
     } else if (keyType === "object") {
       console.log(parentNodes);
-      if (Object.keys(theObject)[0] === key) {
-        parentNodes.push(await safeString(key));
-      }
+      parentNodes.push(await safeString(key));
       if (Array.isArray(theObject[key])) {
         await traverseArray(theObject[key]);
       } else {
         await traverseObject(theObject[key]);
       }
-      if (Object.keys(theObject)[Object.keys(theObject).length - 1] === key) {
-        parentNodes.pop();
-      }
+      parentNodes.pop();
     }
   }
   return true;
@@ -92,17 +88,13 @@ async function traverseArray(theArray) {
       );
     } else if (elemType === "object") {
       console.log(parentNodes);
-      if (theArray.indexOf(elem) === 0) {
-        parentNodes.push(String(theArray.indexOf(elem)));
-      }
+      parentNodes.push(String(theArray.indexOf(elem)));
       if (Array.isArray(elem)) {
         await traverseArray(elem);
       } else {
         await traverseObject(elem);
       }
-      if (theArray.indexOf(elem) === theArray.length - 1) {
-        parentNodes.pop();
-      }
+      parentNodes.pop();
     }
   }
   return true;

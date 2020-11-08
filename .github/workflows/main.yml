@@ -5,8 +5,6 @@ jobs:
     runs-on: ubuntu-latest
     name: yamler test job
     steps:
-      # To use this repository's private action,
-      # you must check out the repository
       - name: Checkout
         uses: actions/checkout@v2
 
@@ -15,6 +13,10 @@ jobs:
         id: yamler
         with:
           yaml-file: "__tests__/test.yaml"
-      # Use the output from the `hello` step
-#      - name: Get the output time
-#        run: echo "The time was ${{ steps.hello.outputs.time }}"
+
+      # Use the output from the yamler step
+      - name: Output Test
+        run: |
+          echo "${{ steps.yamler.outputs.yaml }}"
+          echo "${{ steps.yamler.outputs.what_it_is }}"
+          echo "${{ steps.yamler.outputs.yaml_resources__yaml_1_2_3rd_edition }}"

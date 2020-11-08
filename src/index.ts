@@ -19,6 +19,15 @@ async function traverseObject(theObject: {
   [index: string]: any;
 }): Promise<boolean> {
   for (let key of Object.keys(theObject)) {
+    console.log(parentNodes);
+    if (
+      Object.keys(theObject)[0] === key &&
+      Object.keys(theObject).length > 0
+    ) {
+      parentNodes.pop();
+      parentNodes.push(key);
+    } else {
+    }
     const keyType = typeof theObject[key];
     if (keyType === "string") {
       await handleString(
@@ -31,12 +40,6 @@ async function traverseObject(theObject: {
       } else {
         await traverseObject(theObject[key]);
       }
-      console.log(parentNodes);
-      if (Object.keys(theObject)[Object.keys(theObject).length - 1] === key) {
-        parentNodes.pop();
-      } else {
-        parentNodes.push(key);
-      }
     }
   }
   return true;
@@ -44,7 +47,12 @@ async function traverseObject(theObject: {
 
 async function traverseArray(theArray: Array<any>): Promise<boolean> {
   for (let elem of theArray) {
-    console.log(elem);
+    console.log(parentNodes);
+    if (theArray.indexOf(elem) === 0 && theArray.length > 0) {
+      parentNodes.pop();
+      parentNodes.push(String(theArray.indexOf(elem)));
+    } else if (theArray.indexOf(elem) === theArray.length - 1) {
+    }
     const elemType = typeof elem;
     if (elemType === "string") {
       await handleString(
@@ -58,12 +66,6 @@ async function traverseArray(theArray: Array<any>): Promise<boolean> {
         await traverseArray(elem);
       } else {
         await traverseObject(elem);
-      }
-      console.log(parentNodes);
-      if (theArray.indexOf(elem) < theArray.length - 1) {
-        parentNodes.push(String(theArray.indexOf(elem)));
-      } else if (theArray.indexOf(elem) === theArray.length - 1) {
-        parentNodes.pop();
       }
     }
   }

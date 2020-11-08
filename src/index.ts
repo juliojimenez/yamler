@@ -29,12 +29,14 @@ async function traverseObject(theObject: {
       console.log(parentNodes);
       if (Object.keys(theObject)[0] === key) {
         parentNodes.push(await safeString(key));
-      } else {
       }
       if (Array.isArray(theObject[key])) {
         await traverseArray(theObject[key]);
       } else {
         await traverseObject(theObject[key]);
+      }
+      if (Object.keys(theObject)[Object.keys(theObject).length - 1] === key) {
+        parentNodes.push(await safeString(key));
       }
     }
   }
@@ -55,12 +57,14 @@ async function traverseArray(theArray: Array<any>): Promise<boolean> {
       console.log(parentNodes);
       if (theArray.indexOf(elem) === 0) {
         parentNodes.push(String(theArray.indexOf(elem)));
-      } else if (theArray.indexOf(elem) === theArray.length - 1) {
       }
       if (Array.isArray(elem)) {
         await traverseArray(elem);
       } else {
         await traverseObject(elem);
+      }
+      if (theArray.indexOf(elem) === theArray.length - 1) {
+        parentNodes.pop();
       }
     }
   }

@@ -52,17 +52,17 @@ async function safeString(unsafeString) {
   const removeParenthesesEtc = replaceSpacesEtc.replace(/\(|\)|\[|\]/g, "");
   const replacePlus = removeParenthesesEtc.replace(/\+/g, "p");
   const replaceSharp = replacePlus.replace(/#/g, "s");
-  console.log(replaceSharp);
   return replaceSharp;
 }
 async function traverseObject(theObject) {
   for (let key of Object.keys(theObject)) {
     const keyType = typeof theObject[key];
     if (keyType === "string") {
-      await handleString(
-        `${parentNodes.join("__")}${parentNodes.length > 0 ? "__" : ""}${key}`,
-        theObject[key]
-      );
+      const keyString = `${parentNodes.join("__")}${
+        parentNodes.length > 0 ? "__" : ""
+      }${key}`;
+      console.log(keyString);
+      await handleString(keyString, theObject[key]);
     } else if (keyType === "object") {
       parentNodes.push(await safeString(key));
       if (Array.isArray(theObject[key])) {
@@ -79,12 +79,11 @@ async function traverseArray(theArray) {
   for (let elem of theArray) {
     const elemType = typeof elem;
     if (elemType === "string") {
-      await handleString(
-        `${parentNodes.join("__")}${parentNodes.length > 0 ? "__" : ""}${String(
-          theArray.indexOf(elem)
-        )}`,
-        elem
-      );
+      const keyString = `${parentNodes.join("__")}${
+        parentNodes.length > 0 ? "__" : ""
+      }${String(theArray.indexOf(elem))}`;
+      console.log(keyString);
+      await handleString(keyString, elem);
     } else if (elemType === "object") {
       parentNodes.push(String(theArray.indexOf(elem)));
       if (Array.isArray(elem)) {
@@ -103,9 +102,13 @@ async function handleString(key, value) {
   return true;
 }
 (async () => {
-  const yamlFilePath = core.getInput("yaml-file");
-  const yamlFile = fs_1.default.readFileSync(yamlFilePath, "utf8");
-  const yamlParse = yaml_1.default.parse(yamlFile);
-  console.log(yamlParse);
-  await traverseObject(yamlParse);
+  try {
+    const yamlFilePath = core.getInput("yaml-file");
+    const yamlFile = fs_1.default.readFileSync(yamlFilePath, "utf8");
+    const yamlParse = yaml_1.default.parse(yamlFile);
+    console.log(`***** Output Variables *****`);
+    await traverseObject(yamlParse);
+  } catch (error) {
+    core.setFailed(error.message);
+  }
 })();

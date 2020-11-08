@@ -57,12 +57,6 @@ async function safeString(unsafeString) {
 }
 async function traverseObject(theObject) {
   for (let key of Object.keys(theObject)) {
-    console.log(parentNodes);
-    if (Object.keys(theObject)[0] === key) {
-      parentNodes.pop();
-      parentNodes.push(key);
-    } else {
-    }
     const keyType = typeof theObject[key];
     if (keyType === "string") {
       await handleString(
@@ -70,6 +64,12 @@ async function traverseObject(theObject) {
         theObject[key]
       );
     } else if (keyType === "object") {
+      console.log(parentNodes);
+      if (Object.keys(theObject)[0] === key) {
+        parentNodes.pop();
+        parentNodes.push(key);
+      } else {
+      }
       if (Array.isArray(theObject[key])) {
         await traverseArray(theObject[key]);
       } else {
@@ -81,12 +81,6 @@ async function traverseObject(theObject) {
 }
 async function traverseArray(theArray) {
   for (let elem of theArray) {
-    console.log(parentNodes);
-    if (theArray.indexOf(elem) === 0) {
-      parentNodes.pop();
-      parentNodes.push(String(theArray.indexOf(elem)));
-    } else if (theArray.indexOf(elem) === theArray.length - 1) {
-    }
     const elemType = typeof elem;
     if (elemType === "string") {
       await handleString(
@@ -96,6 +90,12 @@ async function traverseArray(theArray) {
         elem
       );
     } else if (elemType === "object") {
+      console.log(parentNodes);
+      if (theArray.indexOf(elem) === 0) {
+        parentNodes.pop();
+        parentNodes.push(String(theArray.indexOf(elem)));
+      } else if (theArray.indexOf(elem) === theArray.length - 1) {
+      }
       if (Array.isArray(elem)) {
         await traverseArray(elem);
       } else {

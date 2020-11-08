@@ -36,7 +36,7 @@ async function traverseObject(theObject: {
         await traverseObject(theObject[key]);
       }
       if (Object.keys(theObject)[Object.keys(theObject).length - 1] === key) {
-        parentNodes.push(await safeString(key));
+        parentNodes.pop();
       }
     }
   }

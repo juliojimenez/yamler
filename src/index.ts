@@ -26,7 +26,6 @@ async function traverseObject(theObject: {
         theObject[key]
       );
     } else if (keyType === "object") {
-      console.log(parentNodes);
       parentNodes.push(await safeString(key));
       if (Array.isArray(theObject[key])) {
         await traverseArray(theObject[key]);
@@ -50,7 +49,6 @@ async function traverseArray(theArray: Array<any>): Promise<boolean> {
         elem
       );
     } else if (elemType === "object") {
-      console.log(parentNodes);
       parentNodes.push(String(theArray.indexOf(elem)));
       if (Array.isArray(elem)) {
         await traverseArray(elem);

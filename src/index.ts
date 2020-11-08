@@ -20,9 +20,9 @@ async function traverseObject(theObject: {
   for (let key of Object.keys(theObject)) {
     const keyType = typeof theObject[key];
     if (keyType === "string") {
-      const keyString: string = `${parentNodes.join("__")}${
-        parentNodes.length > 0 ? "__" : ""
-      }${key}`;
+      const keyString: string = await safeString(
+        `${parentNodes.join("__")}${parentNodes.length > 0 ? "__" : ""}${key}`
+      );
       console.log(keyString);
       await handleString(keyString, theObject[key]);
     } else if (keyType === "object") {
@@ -42,9 +42,11 @@ async function traverseArray(theArray: Array<any>): Promise<boolean> {
   for (let elem of theArray) {
     const elemType = typeof elem;
     if (elemType === "string") {
-      const keyString: string = `${parentNodes.join("__")}${
-        parentNodes.length > 0 ? "__" : ""
-      }${String(theArray.indexOf(elem))}`;
+      const keyString: string = await safeString(
+        `${parentNodes.join("__")}${parentNodes.length > 0 ? "__" : ""}${String(
+          theArray.indexOf(elem)
+        )}`
+      );
       console.log(keyString);
       await handleString(keyString, elem);
     } else if (elemType === "object") {
@@ -61,8 +63,7 @@ async function traverseArray(theArray: Array<any>): Promise<boolean> {
 }
 
 async function handleString(key: string, value: string): Promise<boolean> {
-  const safeKey = await safeString(key);
-  core.setOutput(safeKey, value);
+  core.setOutput(key, value);
   return true;
 }
 

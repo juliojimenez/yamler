@@ -14,7 +14,7 @@
 
 ## Output
 
-In this example
+In this example, the test file used is almost the same as the content file for [yaml.org](https://yaml.org). A deeper _number_ array was added to test for types other than string, object, and array.
 
 ```
 ***** Output Variables *****
@@ -62,6 +62,9 @@ related_projects__2
 related_projects__3
 related_projects__4
 related_projects__5
+number_object__number_sub_object__number_sub_sub_array__0
+number_object__number_sub_object__number_sub_sub_array__1
+number_object__number_sub_object__number_sub_sub_array__2
 news__0
 news__1
 news__2
@@ -100,4 +103,17 @@ news__34
 news__35
 news__36
 news__37
+```
+
+## Accessing Output Variables
+
+Simple example echoing a few variables.
+
+```
+# Use the output from the yamler step
+- name: Output Test
+run: |
+  echo "${{ steps.yamler.outputs.yaml }}"
+  echo "${{ steps.yamler.outputs.what_it_is }}"
+  echo "${{ steps.yamler.outputs.yaml_resources__yaml_1_2_3rd_edition }}"
 ```

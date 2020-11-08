@@ -29,7 +29,7 @@ async function traverseObject(theObject: {
       console.log(parentNodes);
       if (Object.keys(theObject)[0] === key) {
         parentNodes.pop();
-        parentNodes.push(key);
+        parentNodes.push(await safeString(key));
       } else {
       }
       if (Array.isArray(theObject[key])) {

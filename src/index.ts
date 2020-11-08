@@ -19,7 +19,12 @@ async function traverseObject(theObject: {
 }): Promise<boolean> {
   for (let key of Object.keys(theObject)) {
     const keyType = typeof theObject[key];
-    if (keyType === "string") {
+    if (
+      keyType === "string" ||
+      keyType === "number" ||
+      keyType === "boolean" ||
+      keyType === "bigint"
+    ) {
       const keyString: string = await safeString(
         `${parentNodes.join("__")}${parentNodes.length > 0 ? "__" : ""}${key}`
       );
@@ -41,7 +46,12 @@ async function traverseObject(theObject: {
 async function traverseArray(theArray: Array<any>): Promise<boolean> {
   for (let elem of theArray) {
     const elemType = typeof elem;
-    if (elemType === "string") {
+    if (
+      elemType === "string" ||
+      elemType === "number" ||
+      elemType === "boolean" ||
+      elemType === "bigint"
+    ) {
       const keyString: string = await safeString(
         `${parentNodes.join("__")}${parentNodes.length > 0 ? "__" : ""}${String(
           theArray.indexOf(elem)

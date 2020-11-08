@@ -57,7 +57,12 @@ async function safeString(unsafeString) {
 async function traverseObject(theObject) {
   for (let key of Object.keys(theObject)) {
     const keyType = typeof theObject[key];
-    if (keyType === "string") {
+    if (
+      keyType === "string" ||
+      keyType === "number" ||
+      keyType === "boolean" ||
+      keyType === "bigint"
+    ) {
       const keyString = await safeString(
         `${parentNodes.join("__")}${parentNodes.length > 0 ? "__" : ""}${key}`
       );
@@ -78,7 +83,12 @@ async function traverseObject(theObject) {
 async function traverseArray(theArray) {
   for (let elem of theArray) {
     const elemType = typeof elem;
-    if (elemType === "string") {
+    if (
+      elemType === "string" ||
+      elemType === "number" ||
+      elemType === "boolean" ||
+      elemType === "bigint"
+    ) {
       const keyString = await safeString(
         `${parentNodes.join("__")}${parentNodes.length > 0 ? "__" : ""}${String(
           theArray.indexOf(elem)

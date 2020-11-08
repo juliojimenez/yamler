@@ -65,6 +65,13 @@ Related Projects:
   - JSON          # Official JSON Website
   - Pygments      # Python language Syntax Colorizer /w YAML support
 
+Number Object:
+  Number Sub-Object:
+    Number Sub-Sub-Array:
+      - 3
+      - 15
+      - 23.45
+
 News:
   - 20-NOV-2011 -- JS-YAML, a JavaScript YAML parser by Alexey Zapparov and Vitaly Puzrin.
   - 18-AUG-2010 -- Ruby 1.9.2 includes psych, a libyaml wrapper by Aaron Patterson.

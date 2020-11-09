@@ -9,3 +9,4 @@ runs:
   main: "build/index.js"
 branding:
   icon: "cpu
+  color: "orange"

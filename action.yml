@@ -8,5 +8,5 @@ runs:
   using: "node12"
   main: "build/index.js"
 branding:
-  icon: "cpu
+  icon: "cpu"
   color: "orange"

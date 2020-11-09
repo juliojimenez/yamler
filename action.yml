@@ -7,4 +7,5 @@ inputs:
 runs:
   using: "node12"
   main: "build/index.js"
-icon: cpu
+branding:
+  icon: "cpu

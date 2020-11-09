@@ -109,7 +109,7 @@ news__37
 
 ## Accessing Output Variables
 
-yamler preserves document structure using double-underscore (**) notation. If a value is located at `foo.bar`, the yamler output variable will become `foo**bar`. Array's are indexed in a similar way, the element `bar.foo[5]`can be accessed with yamler at`bar**foo**5`.
+yamler preserves document structure using double-underscore (\_\_) notation. If a value is located at `foo.bar`, the yamler output variable will become `foo__bar`. Arrays are indexed in a similar way, the element `bar.foo[5]`can be accessed with yamler at`bar__foo__5`.
 
 ```
 # Use the output from the yamler step

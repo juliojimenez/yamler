@@ -1,0 +1,12 @@
+name: "yamler"
+description: "YAML Processor GitHub Action"
+inputs:
+  yaml-file:
+    description: "Input file"
+    required: true
+runs:
+  using: "node12"
+  main: "build/index.js"
+branding:
+  icon: "cpu"
+  color: "orange"

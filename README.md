@@ -6,7 +6,7 @@
 
 ```
 - name: yamler
-  uses: juliojimenez/yamler@<version>
+  uses: juliojimenez/yamler@v0
   id: yamler
   with:
     yaml-file: "example.yaml"

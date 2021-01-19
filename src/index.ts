@@ -85,6 +85,6 @@ async function handleString(key: string, value: string): Promise<boolean> {
     console.log(`***** Output Variables *****`);
     await traverseObject(yamlParse);
   } catch (error) {
-    core.setFailed(error.message);
+    core.setFailed(`This just happened: ${error.message}`);
   }
 })();

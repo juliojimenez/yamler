@@ -22,18 +22,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.safeString = void 0;
 const core = __importStar(require("@actions/core"));
 const fs_1 = __importDefault(require("fs"));
 const yaml_1 = __importDefault(require("yaml"));
 let parentNodes = [];
-async function safeString(unsafeString) {
+function safeString(unsafeString) {
     const makeLowerCase = unsafeString.toLowerCase();
     const replaceSpacesEtc = makeLowerCase.replace(/\s|\/|-|\.|:/g, "_");
-    const removeParenthesesEtc = replaceSpacesEtc.replace(/\(|\)|\[|\]/g, "");
+    const removeParenthesesEtc = replaceSpacesEtc.replace(/\(|\)|\[|\]|'|,/g, "");
     const replacePlus = removeParenthesesEtc.replace(/\+/g, "p");
     const replaceSharp = replacePlus.replace(/#/g, "s");
     return replaceSharp;
 }
+exports.safeString = safeString;
 async function traverseObject(theObject) {
     for (let key of Object.keys(theObject)) {
         const keyType = typeof theObject[key];
@@ -41,12 +43,12 @@ async function traverseObject(theObject) {
             keyType === "number" ||
             keyType === "boolean" ||
             keyType === "bigint") {
-            const keyString = await safeString(`${parentNodes.join("__")}${parentNodes.length > 0 ? "__" : ""}${key}`);
+            const keyString = safeString(`${parentNodes.join("__")}${parentNodes.length > 0 ? "__" : ""}${key}`);
             console.log(keyString);
             await handleString(keyString, theObject[key]);
         }
         else if (keyType === "object") {
-            parentNodes.push(await safeString(key));
+            parentNodes.push(safeString(key));
             if (Array.isArray(theObject[key])) {
                 await traverseArray(theObject[key]);
             }
@@ -65,7 +67,7 @@ async function traverseArray(theArray) {
             elemType === "number" ||
             elemType === "boolean" ||
             elemType === "bigint") {
-            const keyString = await safeString(`${parentNodes.join("__")}${parentNodes.length > 0 ? "__" : ""}${String(theArray.indexOf(elem))}`);
+            const keyString = safeString(`${parentNodes.join("__")}${parentNodes.length > 0 ? "__" : ""}${String(theArray.indexOf(elem))}`);
             console.log(keyString);
             await handleString(keyString, elem);
         }
@@ -95,6 +97,6 @@ async function handleString(key, value) {
         await traverseObject(yamlParse);
     }
     catch (error) {
-        core.setFailed(error.message);
+        core.setFailed(`This just happened: ${error.message}`);
     }
 })();

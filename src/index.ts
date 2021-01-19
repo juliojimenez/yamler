@@ -7,9 +7,21 @@ let parentNodes: Array<string> = [];
 
 export function safeString(unsafeString: string): string {
   const makeLowerCase = unsafeString.toLowerCase();
+  /*
+    Replace whitespace OR / OR - OR . OR : WITH _
+  */
   const replaceSpacesEtc = makeLowerCase.replace(/\s|\/|-|\.|:/g, "_");
-  const removeParenthesesEtc = replaceSpacesEtc.replace(/\(|\)|\[|\]/g, "");
+  /*
+    Replace ( OR ) OR [ OR ] OR ' OR , WITH ""
+  */
+  const removeParenthesesEtc = replaceSpacesEtc.replace(/\(|\)|\[|\]|'|,/g, "");
+  /*
+    Replace + WITH p
+  */
   const replacePlus = removeParenthesesEtc.replace(/\+/g, "p");
+  /*
+    Replace # WITH s
+  */
   const replaceSharp = replacePlus.replace(/#/g, "s");
   return replaceSharp;
 }

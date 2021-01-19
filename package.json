@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc -w",
-    "test": "jest",
+    "test": "jest --coverage",
+    "coverage": "codecov",
     "test:ga": "act -j CI",
     "format": "prettier --write **/*.ts",
     "format-check": "prettier --check **/*.ts",
@@ -17,13 +18,18 @@
     "url": "git+https://github.com/juliojimenez/yamler.git"
   },
   "author": "julio@julioj.com",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/juliojimenez/yamler/issues"
   },
   "homepage": "https://github.com/juliojimenez/yamler#readme",
   "devDependencies": {
+    "@types/jest": "^26.0.20",
+    "codecov": "^3.8.1",
+    "jest": "^26.6.3",
+    "jest-circus": "^26.6.3",
     "prettier": "^2.1.2",
+    "ts-jest": "^26.4.4",
     "typescript": "^4.0.3"
   },
   "dependencies": {

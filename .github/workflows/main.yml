@@ -1,9 +1,9 @@
+name: yamler Test Job
 on: [push]
 
 jobs:
-  yamler_job:
+  test_job:
     runs-on: ubuntu-latest
-    name: yamler test job
     steps:
       - name: Checkout
         uses: actions/checkout@v2

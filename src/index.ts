@@ -5,11 +5,23 @@ import YAML from "yaml";
 
 let parentNodes: Array<string> = [];
 
-async function safeString(unsafeString: string): Promise<string> {
+export function safeString(unsafeString: string): string {
   const makeLowerCase = unsafeString.toLowerCase();
+  /*
+    Replace whitespace OR / OR - OR . OR : WITH _
+  */
   const replaceSpacesEtc = makeLowerCase.replace(/\s|\/|-|\.|:/g, "_");
-  const removeParenthesesEtc = replaceSpacesEtc.replace(/\(|\)|\[|\]/g, "");
+  /*
+    Replace ( OR ) OR [ OR ] OR ' OR , WITH ""
+  */
+  const removeParenthesesEtc = replaceSpacesEtc.replace(/\(|\)|\[|\]|'|,/g, "");
+  /*
+    Replace + WITH p
+  */
   const replacePlus = removeParenthesesEtc.replace(/\+/g, "p");
+  /*
+    Replace # WITH s
+  */
   const replaceSharp = replacePlus.replace(/#/g, "s");
   return replaceSharp;
 }
@@ -25,13 +37,13 @@ async function traverseObject(theObject: {
       keyType === "boolean" ||
       keyType === "bigint"
     ) {
-      const keyString: string = await safeString(
+      const keyString: string = safeString(
         `${parentNodes.join("__")}${parentNodes.length > 0 ? "__" : ""}${key}`
       );
       console.log(keyString);
       await handleString(keyString, theObject[key]);
     } else if (keyType === "object") {
-      parentNodes.push(await safeString(key));
+      parentNodes.push(safeString(key));
       if (Array.isArray(theObject[key])) {
         await traverseArray(theObject[key]);
       } else {
@@ -52,7 +64,7 @@ async function traverseArray(theArray: Array<any>): Promise<boolean> {
       elemType === "boolean" ||
       elemType === "bigint"
     ) {
-      const keyString: string = await safeString(
+      const keyString: string = safeString(
         `${parentNodes.join("__")}${parentNodes.length > 0 ? "__" : ""}${String(
           theArray.indexOf(elem)
         )}`
@@ -85,6 +97,6 @@ async function handleString(key: string, value: string): Promise<boolean> {
     console.log(`***** Output Variables *****`);
     await traverseObject(yamlParse);
   } catch (error) {
-    core.setFailed(error.message);
+    core.setFailed(`This just happened: ${error.message}`);
   }
 })();

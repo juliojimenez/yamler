@@ -26,9 +26,7 @@ export function safeString(unsafeString: string): string {
   return replaceSharp;
 }
 
-async function traverseObject(theObject: {
-  [index: string]: any;
-}): Promise<boolean> {
+export function traverseObject(theObject: { [index: string]: any }): boolean {
   for (let key of Object.keys(theObject)) {
     const keyType = typeof theObject[key];
     if (
@@ -41,13 +39,13 @@ async function traverseObject(theObject: {
         `${parentNodes.join("__")}${parentNodes.length > 0 ? "__" : ""}${key}`
       );
       console.log(keyString);
-      await handleString(keyString, theObject[key]);
+      handleString(keyString, theObject[key]);
     } else if (keyType === "object") {
       parentNodes.push(safeString(key));
       if (Array.isArray(theObject[key])) {
-        await traverseArray(theObject[key]);
+        traverseArray(theObject[key]);
       } else {
-        await traverseObject(theObject[key]);
+        traverseObject(theObject[key]);
       }
       parentNodes.pop();
     }
@@ -55,7 +53,7 @@ async function traverseObject(theObject: {
   return true;
 }
 
-async function traverseArray(theArray: Array<any>): Promise<boolean> {
+export function traverseArray(theArray: Array<any>): boolean {
   for (let elem of theArray) {
     const elemType = typeof elem;
     if (
@@ -70,13 +68,13 @@ async function traverseArray(theArray: Array<any>): Promise<boolean> {
         )}`
       );
       console.log(keyString);
-      await handleString(keyString, elem);
+      handleString(keyString, elem);
     } else if (elemType === "object") {
       parentNodes.push(String(theArray.indexOf(elem)));
       if (Array.isArray(elem)) {
-        await traverseArray(elem);
+        traverseArray(elem);
       } else {
-        await traverseObject(elem);
+        traverseObject(elem);
       }
       parentNodes.pop();
     }
@@ -84,7 +82,7 @@ async function traverseArray(theArray: Array<any>): Promise<boolean> {
   return true;
 }
 
-async function handleString(key: string, value: string): Promise<boolean> {
+function handleString(key: string, value: string): boolean {
   core.setOutput(key, value);
   return true;
 }
@@ -95,7 +93,7 @@ async function handleString(key: string, value: string): Promise<boolean> {
     const yamlFile = fs.readFileSync(yamlFilePath, "utf8");
     const yamlParse = YAML.parse(yamlFile);
     console.log(`***** Output Variables *****`);
-    await traverseObject(yamlParse);
+    traverseObject(yamlParse);
   } catch (error) {
     core.setFailed(`This just happened: ${error.message}`);
   }

@@ -1,4 +1,6 @@
-import { safeString } from "../src/index";
+import { safeString, traverseObject } from "../src/index";
+import fs from "fs";
+import YAML from "yaml";
 
 describe("index", () => {
   it("creates safe strings for github workflow output variables", () => {
@@ -8,5 +10,12 @@ describe("index", () => {
     expect(result).toEqual(
       "this_string_is_a_valid_yaml_string_but_were_going_to_make_it_safe_for_github_workflow_output_variables"
     );
+  });
+  it("traverses an object", () => {
+    const yamlFile = fs.readFileSync("traverseobject.yaml", "utf8");
+    const yamlParse = YAML.parse(yamlFile);
+    console.log(`***** Output Variables *****`);
+    const result = traverseObject(yamlParse);
+    expect(result).toBeTruthy();
   });
 });

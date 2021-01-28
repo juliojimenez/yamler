@@ -22,7 +22,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.safeString = void 0;
+exports.traverseArray = exports.traverseObject = exports.safeString = void 0;
 const core = __importStar(require("@actions/core"));
 const fs_1 = __importDefault(require("fs"));
 const yaml_1 = __importDefault(require("yaml"));
@@ -36,7 +36,7 @@ function safeString(unsafeString) {
     return replaceSharp;
 }
 exports.safeString = safeString;
-async function traverseObject(theObject) {
+function traverseObject(theObject) {
     for (let key of Object.keys(theObject)) {
         const keyType = typeof theObject[key];
         if (keyType === "string" ||
@@ -45,22 +45,23 @@ async function traverseObject(theObject) {
             keyType === "bigint") {
             const keyString = safeString(`${parentNodes.join("__")}${parentNodes.length > 0 ? "__" : ""}${key}`);
             console.log(keyString);
-            await handleString(keyString, theObject[key]);
+            handleString(keyString, theObject[key]);
         }
         else if (keyType === "object") {
             parentNodes.push(safeString(key));
             if (Array.isArray(theObject[key])) {
-                await traverseArray(theObject[key]);
+                traverseArray(theObject[key]);
             }
             else {
-                await traverseObject(theObject[key]);
+                traverseObject(theObject[key]);
             }
             parentNodes.pop();
         }
     }
     return true;
 }
-async function traverseArray(theArray) {
+exports.traverseObject = traverseObject;
+function traverseArray(theArray) {
     for (let elem of theArray) {
         const elemType = typeof elem;
         if (elemType === "string" ||
@@ -69,22 +70,23 @@ async function traverseArray(theArray) {
             elemType === "bigint") {
             const keyString = safeString(`${parentNodes.join("__")}${parentNodes.length > 0 ? "__" : ""}${String(theArray.indexOf(elem))}`);
             console.log(keyString);
-            await handleString(keyString, elem);
+            handleString(keyString, elem);
         }
         else if (elemType === "object") {
             parentNodes.push(String(theArray.indexOf(elem)));
             if (Array.isArray(elem)) {
-                await traverseArray(elem);
+                traverseArray(elem);
             }
             else {
-                await traverseObject(elem);
+                traverseObject(elem);
             }
             parentNodes.pop();
         }
     }
     return true;
 }
-async function handleString(key, value) {
+exports.traverseArray = traverseArray;
+function handleString(key, value) {
     core.setOutput(key, value);
     return true;
 }
@@ -94,7 +96,7 @@ async function handleString(key, value) {
         const yamlFile = fs_1.default.readFileSync(yamlFilePath, "utf8");
         const yamlParse = yaml_1.default.parse(yamlFile);
         console.log(`***** Output Variables *****`);
-        await traverseObject(yamlParse);
+        traverseObject(yamlParse);
     }
     catch (error) {
         core.setFailed(`This just happened: ${error.message}`);

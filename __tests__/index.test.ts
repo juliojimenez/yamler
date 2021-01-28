@@ -12,7 +12,7 @@ describe("index", () => {
     );
   });
   it("traverses an object", () => {
-    const yamlFile = fs.readFileSync("traverseobject.yaml", "utf8");
+    const yamlFile = fs.readFileSync("__tests__/traverseobject.yaml", "utf8");
     const yamlParse = YAML.parse(yamlFile);
     console.log(`***** Output Variables *****`);
     const result = traverseObject(yamlParse);

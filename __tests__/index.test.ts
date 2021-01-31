@@ -22,8 +22,7 @@ describe("index", () => {
     const yamlFile = fs.readFileSync("__tests__/traversearray.yaml", "utf8");
     const yamlParse = YAML.parse(yamlFile);
     console.log(`***** Output Variables *****`);
-    console.log(yamlParse);
-    const result = traverseArray(yamlParse);
+    const result = traverseArray(yamlParse["News"]);
     expect(result).toBeTruthy();
   });
 });

@@ -1,4 +1,4 @@
-import { safeString, traverseObject } from "../src/index";
+import { safeString, traverseArray, traverseObject } from "../src/index";
 import fs from "fs";
 import YAML from "yaml";
 
@@ -16,6 +16,13 @@ describe("index", () => {
     const yamlParse = YAML.parse(yamlFile);
     console.log(`***** Output Variables *****`);
     const result = traverseObject(yamlParse);
+    expect(result).toBeTruthy();
+  });
+  it("traverses an array", () => {
+    const yamlFile = fs.readFileSync("__tests__/traversearray.yaml", "utf8");
+    const yamlParse = YAML.parse(yamlFile);
+    console.log(`***** Output Variables *****`);
+    const result = traverseArray(yamlParse);
     expect(result).toBeTruthy();
   });
 });

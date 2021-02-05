@@ -4,6 +4,24 @@ import fs from "fs";
 import YAML from "yaml";
 
 let parentNodes: Array<string> = [];
+const reset: string = "\u001b[0m";
+
+export function ansiColor(): string {
+  const randomNumber: number = Math.floor(Math.random() * 256);
+  const background: string = `\u001b[48;5;${randomNumber}m`;
+  const foreground: string =
+    randomNumber < 8 ||
+    (randomNumber < 34 && randomNumber > 15) ||
+    (randomNumber < 70 && randomNumber > 51) ||
+    (randomNumber < 106 && randomNumber > 87) ||
+    (randomNumber < 142 && randomNumber > 123) ||
+    (randomNumber < 178 && randomNumber > 159) ||
+    (randomNumber < 214 && randomNumber > 195) ||
+    (randomNumber < 244 && randomNumber > 231)
+      ? "\u001b[38;5;15m"
+      : "\u001b[38;5;0m";
+  return `${background}${foreground}`;
+}
 
 export function safeString(unsafeString: string): string {
   const makeLowerCase = unsafeString.toLowerCase();
@@ -27,6 +45,7 @@ export function safeString(unsafeString: string): string {
 }
 
 export function traverseObject(theObject: { [index: string]: any }): boolean {
+  const color: string = ansiColor();
   for (let key of Object.keys(theObject)) {
     const keyType = typeof theObject[key];
     if (
@@ -38,7 +57,7 @@ export function traverseObject(theObject: { [index: string]: any }): boolean {
       const keyString: string = safeString(
         `${parentNodes.join("__")}${parentNodes.length > 0 ? "__" : ""}${key}`
       );
-      console.log(keyString);
+      console.log(`${color}${keyString}`);
       handleString(keyString, theObject[key]);
     } else if (keyType === "object") {
       parentNodes.push(safeString(key));
@@ -67,7 +86,7 @@ export function traverseArray(theArray: Array<any>): boolean {
           theArray.indexOf(elem)
         )}`
       );
-      console.log(keyString);
+      console.log(`${keyString}${reset}`);
       handleString(keyString, elem);
     } else if (elemType === "object") {
       parentNodes.push(String(theArray.indexOf(elem)));

@@ -4,11 +4,10 @@ import fs from "fs";
 import YAML from "yaml";
 
 let parentNodes: Array<string> = [];
-const reset: string = "\033[0m";
 
 export function ansiColor(): string {
   const randomNumber: number = Math.floor(Math.random() * 256);
-  const background: string = `\033[48;5;${randomNumber}m`;
+  const background: string = `\e[48;5;${randomNumber}m`;
   const foreground: string =
     randomNumber < 8 ||
     (randomNumber < 34 && randomNumber > 15) ||
@@ -18,8 +17,8 @@ export function ansiColor(): string {
     (randomNumber < 178 && randomNumber > 159) ||
     (randomNumber < 214 && randomNumber > 195) ||
     (randomNumber < 244 && randomNumber > 231)
-      ? "\033[38;5;15m"
-      : "\033[38;5;0m";
+      ? "e[38;5;15m"
+      : "e[38;5;0m";
   return `${background}${foreground}`;
 }
 
@@ -73,6 +72,7 @@ export function traverseObject(theObject: { [index: string]: any }): boolean {
 }
 
 export function traverseArray(theArray: Array<any>): boolean {
+  const color: string = ansiColor();
   for (let elem of theArray) {
     const elemType = typeof elem;
     if (
@@ -86,7 +86,7 @@ export function traverseArray(theArray: Array<any>): boolean {
           theArray.indexOf(elem)
         )}`
       );
-      console.log(`${keyString}${reset}`);
+      console.log(`${color}${keyString}`);
       handleString(keyString, elem);
     } else if (elemType === "object") {
       parentNodes.push(String(theArray.indexOf(elem)));

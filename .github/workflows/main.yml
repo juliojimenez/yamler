@@ -1,5 +1,7 @@
 name: yamler Test Job
 on: [push]
+env:
+  FORCE_COLOR: 3
 
 jobs:
   test_job:

@@ -35,6 +35,7 @@
   "dependencies": {
     "@actions/core": "^1.2.6",
     "@actions/github": "^4.0.0",
+    "ansi-colors": "^4.1.1",
     "yaml": "^1.10.0"
   }
 }

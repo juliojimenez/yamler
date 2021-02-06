@@ -1,5 +1,10 @@
 name: yamler Test Job
+
 on: [push]
+
+defaults:
+  run:
+    shell: bash
 
 jobs:
   test_job:

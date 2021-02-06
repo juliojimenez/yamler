@@ -4,7 +4,7 @@ on: [push]
 
 defaults:
   run:
-    shell: bash
+    shell: /bin/bash -e {0}
 
 jobs:
   test_job:

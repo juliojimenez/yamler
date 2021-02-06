@@ -18,7 +18,6 @@ jobs:
         id: yamler
         with:
           yaml-file: "__tests__/test.yaml"
-        shell: bash
 
       # Use the output from the yamler step
       - name: Output Test

@@ -1,8 +1,5 @@
 name: yamler Test Job
 on: [push]
-env:
-  FORCE_COLOR: 3
-  TERM: xterm-256color
 
 jobs:
   test_job:
@@ -16,6 +13,7 @@ jobs:
         id: yamler
         with:
           yaml-file: "__tests__/test.yaml"
+        shell: bash
 
       # Use the output from the yamler step
       - name: Output Test

@@ -20,7 +20,3 @@ jobs:
         run: npm run format-check
       - name: Test
         run: npm test
-      - name: Coverage
-        run: npm run coverage
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

@@ -36,7 +36,7 @@ export function traverseObject(theObject: { [index: string]: any }): boolean {
       keyType === "bigint"
     ) {
       const keyString: string = safeString(
-        `${parentNodes.join("__")}${parentNodes.length > 0 ? "__" : ""}${key}`
+        `${parentNodes.join("__")}${parentNodes.length > 0 ? "__" : ""}${key}`,
       );
       console.log(keyString);
       handleString(keyString, theObject[key]);
@@ -64,8 +64,8 @@ export function traverseArray(theArray: Array<any>): boolean {
     ) {
       const keyString: string = safeString(
         `${parentNodes.join("__")}${parentNodes.length > 0 ? "__" : ""}${String(
-          theArray.indexOf(elem)
-        )}`
+          theArray.indexOf(elem),
+        )}`,
       );
       console.log(keyString);
       handleString(keyString, elem);

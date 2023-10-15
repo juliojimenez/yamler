@@ -94,7 +94,7 @@ function handleString(key: string, value: string): boolean {
     const yamlParse = YAML.parse(yamlFile);
     console.log(`***** Output Variables *****`);
     traverseObject(yamlParse);
-  } catch (error) {
+  } catch (error: any) {
     core.setFailed(`This just happened: ${error.message}`);
   }
 })();

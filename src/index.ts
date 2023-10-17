@@ -91,7 +91,8 @@ function handleString(key: string, value: string): boolean {
   try {
     const yamlFilePath = core.getInput("yaml-file");
     const yamlFile = fs.readFileSync(yamlFilePath, "utf8");
-    const yamlParse = YAML.parse(yamlFile);
+    const yamlParse = YAML.parseAllDocuments(yamlFile);
+    console.log(yamlParse);
     console.log(`***** Output Variables *****`);
     traverseObject(yamlParse);
   } catch (error: any) {

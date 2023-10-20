@@ -1,29 +1,29 @@
-import * as core from "@actions/core";
+import * as core from "@actions/core"
 // import github from "@actions/github"
-import fs from "fs";
-import YAML from "yaml";
+import fs from "fs"
+import YAML from "yaml"
 
-let parentNodes: Array<string> = [];
+let parentNodes: Array<string> = []
 
 export function safeString(unsafeString: string): string {
-  const makeLowerCase = unsafeString.toLowerCase();
+  const makeLowerCase = unsafeString.toLowerCase()
   /*
     Replace whitespace OR / OR - OR . OR : WITH _
   */
-  const replaceSpacesEtc = makeLowerCase.replace(/\s|\/|-|\.|:/g, "_");
+  const replaceSpacesEtc = makeLowerCase.replace(/\s|\/|-|\.|:/g, "_")
   /*
     Replace ( OR ) OR [ OR ] OR ' OR , WITH ""
   */
-  const removeParenthesesEtc = replaceSpacesEtc.replace(/\(|\)|\[|\]|'|,/g, "");
+  const removeParenthesesEtc = replaceSpacesEtc.replace(/\(|\)|\[|\]|'|,/g, "")
   /*
     Replace + WITH p
   */
-  const replacePlus = removeParenthesesEtc.replace(/\+/g, "p");
+  const replacePlus = removeParenthesesEtc.replace(/\+/g, "p")
   /*
     Replace # WITH s
   */
-  const replaceSharp = replacePlus.replace(/#/g, "s");
-  return replaceSharp;
+  const replaceSharp = replacePlus.replace(/#/g, "s")
+  return replaceSharp
 }
 
 export function traverseObject(
@@ -31,7 +31,7 @@ export function traverseObject(
   documentIndex: number = -1,
 ): boolean {
   for (let key of Object.keys(theObject)) {
-    const keyType = typeof theObject[key];
+    const keyType = typeof theObject[key]
     if (
       keyType === "string" ||
       keyType === "number" ||
@@ -42,20 +42,20 @@ export function traverseObject(
         `${documentIndex < 0 ? "" : `doc${documentIndex}`}${parentNodes.join(
           "__",
         )}${parentNodes.length > 0 ? "__" : ""}${key}`,
-      );
-      console.log(keyString);
-      handleString(keyString, theObject[key]);
+      )
+      console.log(keyString)
+      handleString(keyString, theObject[key])
     } else if (keyType === "object") {
-      parentNodes.push(safeString(key));
+      parentNodes.push(safeString(key))
       if (Array.isArray(theObject[key])) {
-        traverseArray(theObject[key], documentIndex);
+        traverseArray(theObject[key], documentIndex)
       } else {
-        traverseObject(theObject[key], documentIndex);
+        traverseObject(theObject[key], documentIndex)
       }
-      parentNodes.pop();
+      parentNodes.pop()
     }
   }
-  return true;
+  return true
 }
 
 export function traverseArray(
@@ -63,7 +63,7 @@ export function traverseArray(
   documentIndex: number = -1,
 ): boolean {
   for (let elem of theArray) {
-    const elemType = typeof elem;
+    const elemType = typeof elem
     if (
       elemType === "string" ||
       elemType === "number" ||
@@ -76,49 +76,49 @@ export function traverseArray(
         )}${parentNodes.length > 0 ? "__" : ""}${String(
           theArray.indexOf(elem),
         )}`,
-      );
-      console.log(keyString);
-      handleString(keyString, elem);
+      )
+      console.log(keyString)
+      handleString(keyString, elem)
     } else if (elemType === "object") {
-      parentNodes.push(String(theArray.indexOf(elem)));
+      parentNodes.push(String(theArray.indexOf(elem)))
       if (Array.isArray(elem)) {
-        traverseArray(elem, documentIndex);
+        traverseArray(elem, documentIndex)
       } else {
-        traverseObject(elem, documentIndex);
+        traverseObject(elem, documentIndex)
       }
-      parentNodes.pop();
+      parentNodes.pop()
     }
   }
-  return true;
+  return true
 }
 
 function handleString(key: string, value: string): boolean {
-  core.setOutput(key, value);
-  return true;
+  core.setOutput(key, value)
+  return true
 }
 
-(async () => {
+;(async () => {
   try {
-    const yamlFilePath = core.getInput("yaml-file");
-    const yamlFile = fs.readFileSync(yamlFilePath, "utf8");
-    const multiDoc = core.getBooleanInput("multidoc");
-    let yamlParse;
+    const yamlFilePath = core.getInput("yaml-file")
+    const yamlFile = fs.readFileSync(yamlFilePath, "utf8")
+    const multiDoc = core.getBooleanInput("multidoc")
+    let yamlParse
     if (multiDoc) {
-      console.log(`***** Output Variables *****`);
-      yamlParse = YAML.parseAllDocuments(yamlFile);
+      console.log(`***** Output Variables *****`)
+      yamlParse = YAML.parseAllDocuments(yamlFile)
       if (yamlParse.length > 0) {
         yamlParse.forEach((doc, i) => {
-          console.log(doc);
-          traverseObject(doc, i);
-        });
+          console.log(doc)
+          traverseObject(doc, i)
+        })
       }
     } else {
-      yamlParse = YAML.parse(yamlFile);
-      console.log(yamlParse);
-      console.log(`***** Output Variables *****`);
-      traverseObject(yamlParse);
+      yamlParse = YAML.parse(yamlFile)
+      console.log(yamlParse)
+      console.log(`***** Output Variables *****`)
+      traverseObject(yamlParse)
     }
   } catch (error: any) {
-    core.setFailed(`This just happened: ${error.message}`);
+    core.setFailed(`This just happened: ${error.message}`)
   }
-})();
+})()

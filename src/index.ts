@@ -31,7 +31,7 @@ export function traverseObject(theObject: { [index: string]: any }, documentInde
     const keyType = typeof theObject[key]
     if (keyType === 'string' || keyType === 'number' || keyType === 'boolean' || keyType === 'bigint') {
       const keyString: string = safeString(
-        `${documentIndex < 0 ? '' : `doc${documentIndex}`}${parentNodes.join('__')}${
+        `${documentIndex < 0 ? '' : `doc${documentIndex}__`}${parentNodes.join('__')}${
           parentNodes.length > 0 ? '__' : ''
         }${key}`,
       )
@@ -55,7 +55,7 @@ export function traverseArray(theArray: Array<any>, documentIndex: number = -1):
     const elemType = typeof elem
     if (elemType === 'string' || elemType === 'number' || elemType === 'boolean' || elemType === 'bigint') {
       const keyString: string = safeString(
-        `${documentIndex < 0 ? '' : `doc${documentIndex}`}${parentNodes.join('__')}${
+        `${documentIndex < 0 ? '' : `doc${documentIndex}__`}${parentNodes.join('__')}${
           parentNodes.length > 0 ? '__' : ''
         }${String(theArray.indexOf(elem))}`,
       )

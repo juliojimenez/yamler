@@ -1,5 +1,8 @@
 %YAML 1.2
 ---
+name: This is another document
+purpose: to test multiple document input
+---
 YAML: YAML Ain't Markup Language
 
 What It Is: YAML is a human friendly data serialization

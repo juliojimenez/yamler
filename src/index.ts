@@ -1,5 +1,5 @@
 import * as core from "@actions/core";
-// import github from "@actions/github";
+// import github from "@actions/github"
 import fs from "fs";
 import YAML from "yaml";
 
@@ -26,7 +26,10 @@ export function safeString(unsafeString: string): string {
   return replaceSharp;
 }
 
-export function traverseObject(theObject: { [index: string]: any }): boolean {
+export function traverseObject(
+  theObject: { [index: string]: any },
+  documentIndex: number = -1,
+): boolean {
   for (let key of Object.keys(theObject)) {
     const keyType = typeof theObject[key];
     if (
@@ -36,16 +39,18 @@ export function traverseObject(theObject: { [index: string]: any }): boolean {
       keyType === "bigint"
     ) {
       const keyString: string = safeString(
-        `${parentNodes.join("__")}${parentNodes.length > 0 ? "__" : ""}${key}`,
+        `${documentIndex < 0 ? "" : `doc${documentIndex}`}${parentNodes.join(
+          "__",
+        )}${parentNodes.length > 0 ? "__" : ""}${key}`,
       );
       console.log(keyString);
       handleString(keyString, theObject[key]);
     } else if (keyType === "object") {
       parentNodes.push(safeString(key));
       if (Array.isArray(theObject[key])) {
-        traverseArray(theObject[key]);
+        traverseArray(theObject[key], documentIndex);
       } else {
-        traverseObject(theObject[key]);
+        traverseObject(theObject[key], documentIndex);
       }
       parentNodes.pop();
     }
@@ -53,7 +58,10 @@ export function traverseObject(theObject: { [index: string]: any }): boolean {
   return true;
 }
 
-export function traverseArray(theArray: Array<any>): boolean {
+export function traverseArray(
+  theArray: Array<any>,
+  documentIndex: number = -1,
+): boolean {
   for (let elem of theArray) {
     const elemType = typeof elem;
     if (
@@ -63,7 +71,9 @@ export function traverseArray(theArray: Array<any>): boolean {
       elemType === "bigint"
     ) {
       const keyString: string = safeString(
-        `${parentNodes.join("__")}${parentNodes.length > 0 ? "__" : ""}${String(
+        `${documentIndex < 0 ? "" : `doc${documentIndex}`}${parentNodes.join(
+          "__",
+        )}${parentNodes.length > 0 ? "__" : ""}${String(
           theArray.indexOf(elem),
         )}`,
       );
@@ -72,9 +82,9 @@ export function traverseArray(theArray: Array<any>): boolean {
     } else if (elemType === "object") {
       parentNodes.push(String(theArray.indexOf(elem)));
       if (Array.isArray(elem)) {
-        traverseArray(elem);
+        traverseArray(elem, documentIndex);
       } else {
-        traverseObject(elem);
+        traverseObject(elem, documentIndex);
       }
       parentNodes.pop();
     }
@@ -91,10 +101,23 @@ function handleString(key: string, value: string): boolean {
   try {
     const yamlFilePath = core.getInput("yaml-file");
     const yamlFile = fs.readFileSync(yamlFilePath, "utf8");
-    const yamlParse = YAML.parseAllDocuments(yamlFile);
-    console.log(yamlParse);
-    console.log(`***** Output Variables *****`);
-    traverseObject(yamlParse);
+    const multiDoc = core.getBooleanInput("multidoc");
+    let yamlParse;
+    if (multiDoc) {
+      console.log(`***** Output Variables *****`);
+      yamlParse = YAML.parseAllDocuments(yamlFile);
+      if (yamlParse.length > 0) {
+        yamlParse.forEach((doc, i) => {
+          console.log(doc);
+          traverseObject(doc, i);
+        });
+      }
+    } else {
+      yamlParse = YAML.parse(yamlFile);
+      console.log(yamlParse);
+      console.log(`***** Output Variables *****`);
+      traverseObject(yamlParse);
+    }
   } catch (error: any) {
     core.setFailed(`This just happened: ${error.message}`);
   }

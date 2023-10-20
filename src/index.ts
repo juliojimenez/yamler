@@ -84,7 +84,7 @@ function handleString(key: string, value: string): boolean {
     const yamlFilePath = core.getInput('yaml-file')
     const yamlFile = fs.readFileSync(yamlFilePath, 'utf8')
     const multiDoc = core.getBooleanInput('multidoc')
-    console.log(multiDoc)
+    core.debug(multiDoc.toString())
     let yamlParse
     if (multiDoc) {
       console.log('***** Output Variables *****')

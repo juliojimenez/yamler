@@ -86,7 +86,7 @@ function handleString(key: string, value: string): boolean {
     const multiDoc = core.getBooleanInput('multidoc')
     let yamlParse
     if (multiDoc) {
-      console.log(`***** Output Variables *****`)
+      console.log('***** Output Variables *****')
       yamlParse = YAML.parseAllDocuments(yamlFile)
       if (yamlParse.length > 0) {
         yamlParse.forEach((doc, i) => {

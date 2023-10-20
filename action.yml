@@ -4,8 +4,12 @@ inputs:
   yaml-file:
     description: "Input file"
     required: true
+  multidoc:
+    description: "Multiple Documents"
+    required: false
+    default: false
 runs:
-  using: "node12"
+  using: "node20"
   main: "build/index.js"
 branding:
   icon: "cpu"

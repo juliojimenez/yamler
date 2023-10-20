@@ -3,6 +3,7 @@ on: [push]
 
 jobs:
   test_job:
+    name: Single Doc
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -20,3 +21,25 @@ jobs:
           echo "${{ steps.yamler.outputs.yaml }}"
           echo "${{ steps.yamler.outputs.what_it_is }}"
           echo "${{ steps.yamler.outputs.yaml_resources__yaml_1_2_3rd_edition }}"
+  test_multidoc_job:
+    name: Multi Doc
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: yamler
+        uses: ./
+        id: yamler
+        with:
+          yaml-file: "__tests__/test-multidoc.yaml"
+          multidoc: true
+
+      # Use the output from the yamler step
+      - name: Output Test
+        run: |
+          echo "${{ steps.yamler.outputs.doc1__yaml }}"
+          echo "${{ steps.yamler.outputs.doc1__what_it_is }}"
+          echo "${{ steps.yamler.outputs.doc1__yaml_resources__yaml_1_2_3rd_edition }}"
+  
+

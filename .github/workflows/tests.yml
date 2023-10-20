@@ -4,7 +4,7 @@ jobs:
   tests:
     runs-on: ubuntu-latest
     env:
-      node-version: 15
+      node-version: 20
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -20,7 +20,3 @@ jobs:
         run: npm run format-check
       - name: Test
         run: npm test
-      - name: Coverage
-        run: npm run coverage
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

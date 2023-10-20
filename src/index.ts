@@ -79,7 +79,7 @@ function handleString(key: string, value: string): boolean {
   return true
 }
 
-;(async () => {
+(async () => {
   try {
     const yamlFilePath = core.getInput('yaml-file')
     const yamlFile = fs.readFileSync(yamlFilePath, 'utf8')

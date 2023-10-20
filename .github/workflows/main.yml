@@ -1,5 +1,7 @@
 name: yamler Test Job
-on: [push]
+on:
+  push:
+  workflow_dispatch:
 
 jobs:
   test_job:

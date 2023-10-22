@@ -7,7 +7,6 @@ inputs:
   multidoc:
     description: "Multiple Documents"
     required: false
-    default: 'false'
 runs:
   using: "node20"
   main: "build/index.js"

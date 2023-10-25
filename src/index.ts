@@ -89,7 +89,6 @@ function handleString(key: string, value: string): boolean {
     const yamlFilePath = core.getInput('yaml-file')
     const yamlFile = fs.readFileSync(yamlFilePath, 'utf8')
     const multiDoc = core.getBooleanInput('multidoc')
-    core.debug(multiDoc.toString())
     let yamlParse
     if (multiDoc) {
       console.log('***** Output Variables *****')
@@ -97,8 +96,9 @@ function handleString(key: string, value: string): boolean {
       if (yamlParse.length > 0) {
         yamlParse.forEach((doc, i) => {
           if (doc) {
-            console.log(doc)
-            traverseObject(doc, i)
+            const docJs = doc.toJS
+            console.log(docJs)
+            traverseObject(docJs, i)
           }
         })
       }

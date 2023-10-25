@@ -92,7 +92,7 @@ function handleString(key, value) {
     try {
         const yamlFilePath = core.getInput('yaml-file');
         const yamlFile = fs_1.default.readFileSync(yamlFilePath, 'utf8');
-        const multiDoc = !!core.getInput('multidoc');
+        const multiDoc = core.getBooleanInput('multidoc');
         core.debug(multiDoc.toString());
         let yamlParse;
         if (multiDoc) {
@@ -100,8 +100,10 @@ function handleString(key, value) {
             yamlParse = yaml_1.default.parseAllDocuments(yamlFile);
             if (yamlParse.length > 0) {
                 yamlParse.forEach((doc, i) => {
-                    console.log(doc);
-                    traverseObject(doc, i);
+                    if (doc) {
+                        console.log(doc);
+                        traverseObject(doc, i);
+                    }
                 });
             }
         }

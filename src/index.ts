@@ -96,7 +96,7 @@ function handleString(key: string, value: string): boolean {
       if (yamlParse.length > 0) {
         yamlParse.forEach((doc, i) => {
           if (doc) {
-            const docJs = doc.toJS
+            const docJs = doc.toJS()
             console.log(docJs)
             traverseObject(docJs, i)
           }

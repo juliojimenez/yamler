@@ -27,27 +27,32 @@ export function safeString(unsafeString: string): string {
 }
 
 export function traverseObject(theObject: { [index: string]: any }, documentIndex: number = -1): boolean {
-  for (let key of Object.keys(theObject)) {
-    const keyType = typeof theObject[key]
-    if (keyType === 'string' || keyType === 'number' || keyType === 'boolean' || keyType === 'bigint') {
-      const keyString: string = safeString(
-        `${documentIndex < 0 ? '' : `doc${documentIndex}__`}${parentNodes.join('__')}${
-          parentNodes.length > 0 ? '__' : ''
-        }${key}`,
-      )
-      console.log(keyString)
-      handleString(keyString, theObject[key])
-    } else if (keyType === 'object') {
-      parentNodes.push(safeString(key))
-      if (Array.isArray(theObject[key])) {
-        traverseArray(theObject[key], documentIndex)
-      } else {
-        traverseObject(theObject[key], documentIndex)
+  try {
+    for (let key of Object.keys(theObject)) {
+      const keyType = typeof theObject[key]
+      if (keyType === 'string' || keyType === 'number' || keyType === 'boolean' || keyType === 'bigint') {
+        const keyString: string = safeString(
+          `${documentIndex < 0 ? '' : `doc${documentIndex}__`}${parentNodes.join('__')}${
+            parentNodes.length > 0 ? '__' : ''
+          }${key}`,
+        )
+        console.log(keyString)
+        handleString(keyString, theObject[key])
+      } else if (keyType === 'object') {
+        parentNodes.push(safeString(key))
+        if (Array.isArray(theObject[key])) {
+          traverseArray(theObject[key], documentIndex)
+        } else {
+          traverseObject(theObject[key], documentIndex)
+        }
+        parentNodes.pop()
       }
-      parentNodes.pop()
     }
+    return true
+  } catch (error) {
+    console.log('No object found. Could happen with metadata or specification sections.')
+    return false
   }
-  return true
 }
 
 export function traverseArray(theArray: Array<any>, documentIndex: number = -1): boolean {

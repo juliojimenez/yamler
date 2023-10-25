@@ -101,7 +101,7 @@ function handleString(key, value) {
             if (yamlParse.length > 0) {
                 yamlParse.forEach((doc, i) => {
                     if (doc) {
-                        console.log(doc);
+                        console.log(doc.contents);
                         traverseObject(doc, i);
                     }
                 });

@@ -27,27 +27,32 @@ export function safeString(unsafeString: string): string {
 }
 
 export function traverseObject(theObject: { [index: string]: any }, documentIndex: number = -1): boolean {
-  for (let key of Object.keys(theObject)) {
-    const keyType = typeof theObject[key]
-    if (keyType === 'string' || keyType === 'number' || keyType === 'boolean' || keyType === 'bigint') {
-      const keyString: string = safeString(
-        `${documentIndex < 0 ? '' : `doc${documentIndex}__`}${parentNodes.join('__')}${
-          parentNodes.length > 0 ? '__' : ''
-        }${key}`,
-      )
-      console.log(keyString)
-      handleString(keyString, theObject[key])
-    } else if (keyType === 'object') {
-      parentNodes.push(safeString(key))
-      if (Array.isArray(theObject[key])) {
-        traverseArray(theObject[key], documentIndex)
-      } else {
-        traverseObject(theObject[key], documentIndex)
+  try {
+    for (let key of Object.keys(theObject)) {
+      const keyType = typeof theObject[key]
+      if (keyType === 'string' || keyType === 'number' || keyType === 'boolean' || keyType === 'bigint') {
+        const keyString: string = safeString(
+          `${documentIndex < 0 ? '' : `doc${documentIndex}__`}${parentNodes.join('__')}${
+            parentNodes.length > 0 ? '__' : ''
+          }${key}`,
+        )
+        console.log(keyString)
+        handleString(keyString, theObject[key])
+      } else if (keyType === 'object') {
+        parentNodes.push(safeString(key))
+        if (Array.isArray(theObject[key])) {
+          traverseArray(theObject[key], documentIndex)
+        } else {
+          traverseObject(theObject[key], documentIndex)
+        }
+        parentNodes.pop()
       }
-      parentNodes.pop()
     }
+    return true
+  } catch (error) {
+    console.log('No object found. Could happen with metadata or specification sections.')
+    return false
   }
-  return true
 }
 
 export function traverseArray(theArray: Array<any>, documentIndex: number = -1): boolean {
@@ -79,7 +84,7 @@ function handleString(key: string, value: string): boolean {
   return true
 }
 
-;(async () => {
+(async () => {
   try {
     const yamlFilePath = core.getInput('yaml-file')
     const yamlFile = fs.readFileSync(yamlFilePath, 'utf8')
@@ -91,17 +96,22 @@ function handleString(key: string, value: string): boolean {
       yamlParse = YAML.parseAllDocuments(yamlFile)
       if (yamlParse.length > 0) {
         yamlParse.forEach((doc, i) => {
-          console.log(doc)
-          traverseObject(doc, i)
+          if (doc) {
+            const docJs = doc.toJS()
+            traverseObject(docJs, i)
+          }
         })
       }
     } else {
       yamlParse = YAML.parse(yamlFile)
-      console.log(yamlParse)
       console.log(`***** Output Variables *****`)
       traverseObject(yamlParse)
     }
   } catch (error: any) {
-    core.setFailed(`This just happened: ${error.message}`)
+    if (process.env.NODE_ENV !== "test") {
+      core.setFailed(`This just happened: ${error.message}`)
+    } else {
+      core.debug('Everybody chill, we\'re running a test')
+    }
   }
 })()

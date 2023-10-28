@@ -1,5 +1,7 @@
-name: yamler Test Job
-on: [push]
+name: E2E Tests
+on:
+  push:
+  workflow_dispatch:
 
 jobs:
   test_job:
@@ -38,8 +40,5 @@ jobs:
       # Use the output from the yamler step
       - name: Output Test
         run: |
-          echo "${{ steps.yamler.outputs.doc1__yaml }}"
-          echo "${{ steps.yamler.outputs.doc1__what_it_is }}"
-          echo "${{ steps.yamler.outputs.doc1__yaml_resources__yaml_1_2_3rd_edition }}"
-  
-
+          echo "${{ steps.yamler.outputs.doc0__name }}"
+          echo "${{ steps.yamler.outputs.doc0__purpose }}"  

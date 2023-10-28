@@ -97,14 +97,12 @@ function handleString(key: string, value: string): boolean {
         yamlParse.forEach((doc, i) => {
           if (doc) {
             const docJs = doc.toJS()
-            console.log(docJs)
             traverseObject(docJs, i)
           }
         })
       }
     } else {
       yamlParse = YAML.parse(yamlFile)
-      console.log(yamlParse)
       console.log(`***** Output Variables *****`)
       traverseObject(yamlParse)
     }

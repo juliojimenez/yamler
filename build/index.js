@@ -107,7 +107,6 @@ function handleString(key, value) {
                 yamlParse.forEach((doc, i) => {
                     if (doc) {
                         const docJs = doc.toJS();
-                        console.log(docJs);
                         traverseObject(docJs, i);
                     }
                 });
@@ -115,7 +114,6 @@ function handleString(key, value) {
         }
         else {
             yamlParse = yaml_1.default.parse(yamlFile);
-            console.log(yamlParse);
             console.log(`***** Output Variables *****`);
             traverseObject(yamlParse);
         }

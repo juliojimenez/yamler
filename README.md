@@ -1,15 +1,20 @@
 # yamler
 
-**yamler** is a GitHub Action that processes an entire YAML document and makes all elements available to you as GitHub Workflow output variables.
+**yamler** is a GitHub Action that parses an entire YAML document and makes all elements available to you as GitHub Workflow output variables.
+
+Support for multiple documents is provided by the `multidoc` attribute (default: `false`). 
+
+> YAML uses three dashes (`---`) to separate directives from document content. This also serves to signal the start of a document if no directives are present. (https://yaml.org/spec/1.2.2/#22-structures)
 
 ## Usage
 
 ```
 - name: yamler
-  uses: juliojimenez/yamler@v0
+  uses: juliojimenez/yamler@v1.0.0
   id: yamler
   with:
     yaml-file: "example.yaml"
+    multidoc: true|false
 ```
 
 ## Output
@@ -107,6 +112,99 @@ news__36
 news__37
 ```
 
+Multiple documents are zero-indexed and variable names are prefixed with `docN`. Formatting for the rest of the variable name remains the same as above.
+
+```
+***** Output Variables *****
+doc0__name
+doc0__purpose
+doc1__yaml
+doc1__what_it_is
+doc1__yaml_resources__yaml_1_2_3rd_edition
+doc1__yaml_resources__yaml_1_1_2nd_edition
+doc1__yaml_resources__yaml_1_0_1st_edition
+doc1__yaml_resources__yaml_issues_page
+doc1__yaml_resources__yaml_mailing_list
+doc1__yaml_resources__yaml_irc_channel
+doc1__yaml_resources__yaml_cookbook_ruby
+doc1__yaml_resources__yaml_reference_parser
+doc1__projects__c_cpp_libraries__0
+doc1__projects__c_cpp_libraries__1
+doc1__projects__c_cpp_libraries__2
+doc1__projects__ruby__0
+doc1__projects__ruby__1
+doc1__projects__ruby__2
+doc1__projects__python__0
+doc1__projects__python__1
+doc1__projects__java__0
+doc1__projects__java__1
+doc1__projects__java__2
+doc1__projects__java__3
+doc1__projects__perl_modules__0
+doc1__projects__perl_modules__1
+doc1__projects__perl_modules__2
+doc1__projects__perl_modules__3
+doc1__projects__perl_modules__4
+doc1__projects__cs__net__0
+doc1__projects__cs__net__1
+doc1__projects__php__0
+doc1__projects__php__1
+doc1__projects__php__2
+doc1__projects__ocaml__0
+doc1__projects__javascript__0
+doc1__projects__javascript__1
+doc1__projects__actionscript__0
+doc1__projects__haskell__0
+doc1__projects__others__0
+doc1__related_projects__0
+doc1__related_projects__1
+doc1__related_projects__2
+doc1__related_projects__3
+doc1__related_projects__4
+doc1__related_projects__5
+doc1__number_object__number_sub_object__number_sub_sub_array__0
+doc1__number_object__number_sub_object__number_sub_sub_array__1
+doc1__number_object__number_sub_object__number_sub_sub_array__2
+doc1__news__0
+doc1__news__1
+doc1__news__2
+doc1__news__3
+doc1__news__4
+doc1__news__5
+doc1__news__6
+doc1__news__7
+doc1__news__8
+doc1__news__9
+doc1__news__10
+doc1__news__11
+doc1__news__12
+doc1__news__13
+doc1__news__14
+doc1__news__15
+doc1__news__16
+doc1__news__17
+doc1__news__18
+doc1__news__19
+doc1__news__20
+doc1__news__21
+doc1__news__22
+doc1__news__23
+doc1__news__24
+doc1__news__25
+doc1__news__26
+doc1__news__27
+doc1__news__28
+doc1__news__29
+doc1__news__30
+doc1__news__31
+doc1__news__32
+doc1__news__33
+doc1__news__34
+doc1__news__35
+doc1__news__36
+doc1__news__37
+```
+
 ## Accessing Output Variables
 
 yamler preserves document structure using double-underscore (\_\_) notation. If a value is located at `foo.bar`, the yamler output variable will become `foo__bar`. Arrays are indexed in a similar way, the element `bar.foo[5]`can be accessed with yamler at`bar__foo__5`.
@@ -114,8 +212,18 @@ yamler preserves document structure using double-underscore (\_\_) notation. If 
 ```
 # Use the output from the yamler step
 - name: Output Test
-run: |
-  echo "${{ steps.yamler.outputs.yaml }}"
-  echo "${{ steps.yamler.outputs.what_it_is }}"
-  echo "${{ steps.yamler.outputs.yaml_resources__yaml_1_2_3rd_edition }}"
+  run: |
+    echo "${{ steps.yamler.outputs.yaml }}"
+    echo "${{ steps.yamler.outputs.what_it_is }}"
+    echo "${{ steps.yamler.outputs.yaml_resources__yaml_1_2_3rd_edition }}"
+```
+
+In a multidoc scenario...
+
+```
+# Use the output from the yamler step
+- name: Output Test
+  run: |
+    echo "${{ steps.yamler.outputs.doc0__name }}"
+    echo "${{ steps.yamler.outputs.doc0__purpose }}" 
 ```

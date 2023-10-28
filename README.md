@@ -1,3 +1,5 @@
+[![yamler Tests](https://github.com/juliojimenez/yamler/actions/workflows/tests.yml/badge.svg)](https://github.com/juliojimenez/yamler/actions/workflows/tests.yml) [![yamler Test Job](https://github.com/juliojimenez/yamler/actions/workflows/main.yml/badge.svg)](https://github.com/juliojimenez/yamler/actions/workflows/main.yml) ![GitHub release (with filter)](https://img.shields.io/github/v/release/juliojimenez/yamler)
+
 # yamler
 
 **yamler** is a GitHub Action that parses an entire YAML document and makes all elements available to you as GitHub Workflow output variables.

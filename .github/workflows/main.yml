@@ -1,4 +1,4 @@
-name: yamler Test Job
+name: E2E Tests
 on:
   push:
   workflow_dispatch:

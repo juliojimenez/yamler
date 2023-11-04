@@ -12,7 +12,7 @@ Support for multiple documents is provided by the `multidoc` attribute (default:
 
 ```
 - name: yamler
-  uses: juliojimenez/yamler@v1.0.0
+  uses: juliojimenez/yamler@v1.0.1
   id: yamler
   with:
     yaml-file: "example.yaml"

@@ -2,7 +2,7 @@
 
 # yamler
 
-**yamler** is a GitHub Action that parses an entire YAML document and makes all elements available to you as GitHub Workflow output variables.
+**yamler** is a GitHub Action that parses an entire YAML document and makes all elements available as GitHub Workflow output variables.
 
 Support for multiple documents is provided by the `multidoc` attribute (default: `false`). 
 
@@ -12,7 +12,7 @@ Support for multiple documents is provided by the `multidoc` attribute (default:
 
 ```
 - name: yamler
-  uses: juliojimenez/yamler@v1.0.1
+  uses: juliojimenez/yamler@v1.0.2
   id: yamler
   with:
     yaml-file: "example.yaml"

@@ -1,7 +1,7 @@
 {
   "name": "yamler",
-  "version": "1.0.1",
-  "description": "YAML Processor GitHub Action",
+  "version": "1.0.2",
+  "description": "YAML Parsing GitHub Action",
   "main": "build/main.js",
   "scripts": {
     "build": "tsc",

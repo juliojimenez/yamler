@@ -4,7 +4,7 @@
 
 **yamler** is a GitHub Action that parses an entire YAML document and makes all elements available as GitHub Workflow output variables.
 
-Support for multiple documents is provided by the `multidoc` attribute (default: `false`). 
+Support for multiple documents is provided by the `multidoc` attribute (default: `false`).
 
 > YAML uses three dashes (`---`) to separate directives from document content. This also serves to signal the start of a document if no directives are present. (https://yaml.org/spec/1.2.2/#22-structures)
 
@@ -12,7 +12,7 @@ Support for multiple documents is provided by the `multidoc` attribute (default:
 
 ```
 - name: yamler
-  uses: juliojimenez/yamler@v1.0.4
+  uses: juliojimenez/yamler@v1.0.5
   id: yamler
   with:
     yaml-file: "example.yaml"
@@ -227,5 +227,5 @@ In a multidoc scenario...
 - name: Output Test
   run: |
     echo "${{ steps.yamler.outputs.doc0__name }}"
-    echo "${{ steps.yamler.outputs.doc0__purpose }}" 
+    echo "${{ steps.yamler.outputs.doc0__purpose }}"
 ```

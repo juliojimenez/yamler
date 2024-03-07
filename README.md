@@ -12,7 +12,7 @@ Support for multiple documents is provided by the `multidoc` attribute (default:
 
 ```
 - name: yamler
-  uses: juliojimenez/yamler@v1.0.7
+  uses: juliojimenez/yamler@v1.0.8
   id: yamler
   with:
     yaml-file: "example.yaml"
@@ -21,7 +21,7 @@ Support for multiple documents is provided by the `multidoc` attribute (default:
 
 ## Output
 
-yamler outputs the entire document as *yamler-formatted* output variable names. This serves as a good reference when the YAML document contains tags with characters not supported by GitHub Workflow variable names. yamler will automatically transform tags into friendly variable names.
+yamler outputs the entire document as _yamler-formatted_ output variable names. This serves as a good reference when the YAML document contains tags with characters not supported by GitHub Workflow variable names. yamler will automatically transform tags into friendly variable names.
 
 In this example, the test file used is derived from [yaml.org](https://yaml.org). A deeper _number_ array was added to test for types other than string, object, and array.
 

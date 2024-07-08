@@ -17,7 +17,7 @@ Support for multiple documents is provided by the `multidoc` attribute (default:
 
 ```
 - name: yamler
-  uses: juliojimenez/yamler@v1.0.11
+  uses: juliojimenez/yamler@v1.1.0
   id: yamler
   with:
     yaml-file: "example.yaml"
@@ -257,7 +257,7 @@ Here is an example of how to use yamler to parse the front matter from a markdow
 
 ```yaml
 - name: yamler
-  uses: juliojimenez/yamler@v1.0.11
+  uses: juliojimenez/yamler@v1.1.0
   id: yamler
   with:
     yaml-file: "doc.md"

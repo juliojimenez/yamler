@@ -26,7 +26,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.traverseArray = exports.traverseObject = exports.safeString = void 0;
+exports.safeString = safeString;
+exports.traverseObject = traverseObject;
+exports.traverseArray = traverseArray;
 const core = __importStar(require("@actions/core"));
 const fs_1 = __importDefault(require("fs"));
 const yaml_1 = __importDefault(require("yaml"));
@@ -39,7 +41,6 @@ function safeString(unsafeString) {
     const replaceSharp = replacePlus.replace(/#/g, 's');
     return replaceSharp;
 }
-exports.safeString = safeString;
 function traverseObject(theObject, documentIndex = -1) {
     try {
         for (let key of Object.keys(theObject)) {
@@ -67,7 +68,6 @@ function traverseObject(theObject, documentIndex = -1) {
         return false;
     }
 }
-exports.traverseObject = traverseObject;
 function traverseArray(theArray, documentIndex = -1) {
     for (let elem of theArray) {
         const elemType = typeof elem;
@@ -89,7 +89,6 @@ function traverseArray(theArray, documentIndex = -1) {
     }
     return true;
 }
-exports.traverseArray = traverseArray;
 function handleString(key, value) {
     core.setOutput(key, value);
     return true;

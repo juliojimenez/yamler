@@ -17,7 +17,7 @@ Support for multiple documents is provided by the `multidoc` attribute (default:
 
 ```
 - name: yamler
-  uses: juliojimenez/yamler@v1.0.10
+  uses: juliojimenez/yamler@v1.0.11
   id: yamler
   with:
     yaml-file: "example.yaml"
@@ -257,7 +257,7 @@ Here is an example of how to use yamler to parse the front matter from a markdow
 
 ```yaml
 - name: yamler
-  uses: juliojimenez/yamler@v1.0.10
+  uses: juliojimenez/yamler@v1.0.11
   id: yamler
   with:
     yaml-file: "doc.md"
@@ -270,6 +270,14 @@ Here is an example of how to use yamler to parse the front matter from a markdow
     echo "${{ steps.yamler.outputs.doc0__redirect_from }}"
     echo "${{ steps.yamler.outputs.doc0__reviewed_on }}"
     echo "${{ steps.yamler.outputs.doc0__reviewed_by }}"
+```
+
+```
+Front Matter
+/docs/front-matter/
+/docs/frontmatter/index.html
+2024-07-07
+juliojimenez
 ```
 
 This is a great way to validate front matter attributes in markdown files and make it available for further processing in GitHub Workflows. For example:

@@ -237,14 +237,14 @@ In a multidoc scenario...
 
 ## GitHub Pages (Jekyll) Front Matter
 
-yamler can be used to parse YAML front matter in GitHub Pages (Jekyll) files. The front matter must be the first thing in the file and must take the form of valid YAML set between triple-dashed lines. Here is a basic example:
+yamler can be used to parse YAML front matter in GitHub Pages (Jekyll) markdown files. The front matter must be the first thing in the file and must take the form of valid YAML set between triple-dashed lines. Here is a basic example:
 
 ```yaml
 ---
 title: Front Matter
 permalink: /docs/front-matter/
 redirect_from: /docs/frontmatter/index.html
-reviewed_on: 2024-07-07
+reviewed_on: 2025-07-07
 reviewed_by: juliojimenez
 ---
 
@@ -253,13 +253,27 @@ reviewed_by: juliojimenez
 Blah blah blah
 ```
 
-Here is an example of how to use yamler to parse the front matter from a file:
+Here is an example of how to use yamler to parse the front matter from a markdown file:
 
 ```yaml
 - name: yamler
   uses: juliojimenez/yamler@v1.0.10
   id: yamler
   with:
-    yaml-file: "example.yaml"
+    yaml-file: "doc.md"
     multidoc: true
+
+- name: Output
+  run: |
+    echo "${{ steps.yamler.outputs.doc0__title }}"
+    echo "${{ steps.yamler.outputs.doc0__permalink }}"
+    echo "${{ steps.yamler.outputs.doc0__redirect_from }}"
+    echo "${{ steps.yamler.outputs.doc0__reviewed_on }}"
+    echo "${{ steps.yamler.outputs.doc0__reviewed_by }}"
 ```
+
+This is a great way to validate front matter attributes in markdown files and make it available for further processing in GitHub Workflows. For example:
+
+- Ensuring all markdown files have a set of required attributes.
+- Listing documents that have not been reviewed in a while.
+- Notifying authors when their documents are out of date.

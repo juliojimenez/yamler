@@ -54,11 +54,13 @@ jobs:
         id: yamler
         with:
           yaml-file: "__tests__/front-matter.md"
-          multidoc: true
+          # multidoc: true
 
       # Use the output from the yamler step
       - name: Output Test
         run: |
-          echo "${{ steps.yamler.outputs.doc0__title }}"
-          echo "${{ steps.yamler.outputs.doc0__permalink }}"
-          echo "${{ steps.yamler.outputs.doc0__redirect_from }}"
+          echo "${{ steps.yamler.outputs.title }}"
+          echo "${{ steps.yamler.outputs.permalink }}"
+          echo "${{ steps.yamler.outputs.redirect_from }}"
+          echo "${{ steps.yamler.outputs.reviewed_on }}"
+          echo "${{ steps.yamler.outputs.reviewed_by }}"

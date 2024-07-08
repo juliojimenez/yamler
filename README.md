@@ -2,6 +2,11 @@
 
 # yamler
 
+- [Usage](#usage)
+- [Output](#output)
+- [Accessing Output Variables](#accessing-output-variables)
+- [GitHub Pages (Jekyll) Front Matter](#github-pages-jekyll-front-matter)
+
 **yamler** is a GitHub Action that parses an entire YAML document and makes all elements available as GitHub Workflow output variables.
 
 Support for multiple documents is provided by the `multidoc` attribute (default: `false`).
@@ -228,4 +233,33 @@ In a multidoc scenario...
   run: |
     echo "${{ steps.yamler.outputs.doc0__name }}"
     echo "${{ steps.yamler.outputs.doc0__purpose }}"
+```
+
+## GitHub Pages (Jekyll) Front Matter
+
+yamler can be used to parse YAML front matter in GitHub Pages (Jekyll) files. The front matter must be the first thing in the file and must take the form of valid YAML set between triple-dashed lines. Here is a basic example:
+
+```yaml
+---
+title: Front Matter
+permalink: /docs/front-matter/
+redirect_from: /docs/frontmatter/index.html
+reviewed_on: 2024-07-07
+reviewed_by: juliojimenez
+---
+
+# Example
+
+Blah blah blah
+```
+
+Here is an example of how to use yamler to parse the front matter from a file:
+
+```yaml
+- name: yamler
+  uses: juliojimenez/yamler@v1.0.10
+  id: yamler
+  with:
+    yaml-file: "example.yaml"
+    multidoc: true
 ```

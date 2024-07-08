@@ -2,6 +2,8 @@
 title: Front Matter
 permalink: /docs/front-matter/
 redirect_from: /docs/frontmatter/index.html
+reviewed_on: 2024-07-07
+reviewed_by: juliojimenez
 ---
 
 Any file that contains a [YAML](https://yaml.org/) front matter block will be

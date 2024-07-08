@@ -1,6 +1,6 @@
 {
   "name": "yamler",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "YAML Parsing GitHub Action",
   "main": "build/main.js",
   "scripts": {

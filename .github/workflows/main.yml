@@ -42,3 +42,23 @@ jobs:
         run: |
           echo "${{ steps.yamler.outputs.doc0__name }}"
           echo "${{ steps.yamler.outputs.doc0__purpose }}"  
+  test_front_matter_job:
+    name: Front Matter
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: yamler
+        uses: ./
+        id: yamler
+        with:
+          yaml-file: "__tests__/front-matter.md"
+          multidoc: true
+
+      # Use the output from the yamler step
+      - name: Output Test
+        run: |
+          echo "${{ steps.yamler.outputs.doc0__title }}"
+          echo "${{ steps.yamler.outputs.doc0__permalink }}"
+          echo "${{ steps.yamler.outputs.doc0__redirect_from }}"

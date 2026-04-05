@@ -25,4 +25,79 @@ describe('index', () => {
     const result = traverseArray(yamlParse['News'])
     expect(result).toBeTruthy()
   })
+  it('traverses an object with nested arrays', () => {
+    const data = {
+      projects: {
+        ruby: ['psych', 'RbYaml', 'yaml4r'],
+        python: ['PyYaml', 'PySyck'],
+      },
+      numbers: [3, 15, 23.45],
+    }
+    const result = traverseObject(data)
+    expect(result).toBeTruthy()
+  })
+  it('traverses an array containing objects', () => {
+    const data = [
+      { name: 'Alice', age: 30 },
+      { name: 'Bob', age: 25 },
+    ]
+    const result = traverseArray(data)
+    expect(result).toBeTruthy()
+  })
+  it('traverses an array containing nested arrays', () => {
+    const data = [['a', 'b'], ['c', 'd']]
+    const result = traverseArray(data)
+    expect(result).toBeTruthy()
+  })
+  it('traverses with a document index', () => {
+    const data = { name: 'test', items: ['one', 'two'] }
+    const result = traverseObject(data, 0)
+    expect(result).toBeTruthy()
+  })
+  it('traverses an array with a document index', () => {
+    const data = ['first', 'second']
+    const result = traverseArray(data, 0)
+    expect(result).toBeTruthy()
+  })
+  it('handles boolean and number values', () => {
+    const data = { enabled: true, count: 42, label: 'test' }
+    const result = traverseObject(data)
+    expect(result).toBeTruthy()
+  })
+  it('returns false when traverseObject receives null', () => {
+    const result = traverseObject(null as any)
+    expect(result).toBeFalsy()
+  })
+  it('parses a single document yaml file', () => {
+    process.env['INPUT_YAML-FILE'] = '__tests__/traverseobject.yaml'
+    process.env['INPUT_MULTIDOC'] = 'false'
+    process.env['NODE_ENV'] = 'test'
+    jest.isolateModules(() => {
+      require('../src/index')
+    })
+  })
+  it('parses a multidoc yaml file', () => {
+    process.env['INPUT_YAML-FILE'] = '__tests__/test-multidoc.yaml'
+    process.env['INPUT_MULTIDOC'] = 'true'
+    process.env['NODE_ENV'] = 'test'
+    jest.isolateModules(() => {
+      require('../src/index')
+    })
+  })
+  it('parses front matter from a markdown file', () => {
+    process.env['INPUT_YAML-FILE'] = '__tests__/front-matter.md'
+    process.env['INPUT_MULTIDOC'] = 'true'
+    process.env['NODE_ENV'] = 'test'
+    jest.isolateModules(() => {
+      require('../src/index')
+    })
+  })
+  it('handles errors when yaml file does not exist', () => {
+    process.env['INPUT_YAML-FILE'] = '__tests__/nonexistent.yaml'
+    process.env['INPUT_MULTIDOC'] = 'false'
+    process.env['NODE_ENV'] = 'test'
+    jest.isolateModules(() => {
+      require('../src/index')
+    })
+  })
 })

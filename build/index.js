@@ -15,18 +15,30 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.traverseArray = exports.traverseObject = exports.safeString = void 0;
+exports.safeString = safeString;
+exports.traverseObject = traverseObject;
+exports.traverseArray = traverseArray;
 const core = __importStar(require("@actions/core"));
 const fs_1 = __importDefault(require("fs"));
 const yaml_1 = __importDefault(require("yaml"));
@@ -39,7 +51,6 @@ function safeString(unsafeString) {
     const replaceSharp = replacePlus.replace(/#/g, 's');
     return replaceSharp;
 }
-exports.safeString = safeString;
 function traverseObject(theObject, documentIndex = -1) {
     try {
         for (let key of Object.keys(theObject)) {
@@ -67,7 +78,6 @@ function traverseObject(theObject, documentIndex = -1) {
         return false;
     }
 }
-exports.traverseObject = traverseObject;
 function traverseArray(theArray, documentIndex = -1) {
     for (let elem of theArray) {
         const elemType = typeof elem;
@@ -89,7 +99,6 @@ function traverseArray(theArray, documentIndex = -1) {
     }
     return true;
 }
-exports.traverseArray = traverseArray;
 function handleString(key, value) {
     core.setOutput(key, value);
     return true;
@@ -99,6 +108,7 @@ function handleString(key, value) {
         const yamlFilePath = core.getInput('yaml-file');
         const yamlFile = fs_1.default.readFileSync(yamlFilePath, 'utf8');
         const multiDoc = core.getBooleanInput('multidoc');
+        console.log(multiDoc);
         let yamlParse;
         if (multiDoc) {
             console.log('***** Output Variables *****');

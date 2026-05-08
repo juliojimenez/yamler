@@ -22,7 +22,7 @@
   "homepage": "https://github.com/juliojimenez/yamler#readme",
   "devDependencies": {
     "@types/jest": "^30.0.0",
-    "jest": "^30.3.0",
+    "jest": "^30.4.1",
     "jest-circus": "^30.3.0",
     "ts-jest": "^29.2.5",
     "typescript": "^6.0.2"

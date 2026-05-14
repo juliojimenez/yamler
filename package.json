@@ -28,7 +28,7 @@
     "typescript": "^6.0.2"
   },
   "dependencies": {
-    "@actions/core": "^1.11.0",
+    "@actions/core": "^3.0.1",
     "yaml": "^2.9.0"
   }
 }
